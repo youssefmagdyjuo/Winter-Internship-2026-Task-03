@@ -5,9 +5,11 @@ import { getApprovedProducts } from '../features/products/approvedProducts'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchApprovedProductsData } from '../hooks/productsFetching'
 import { Link } from 'react-router-dom'
+import Loader from '../components/Loader'
 export default function Products() {
     //variables
     const dispatch = useDispatch()
+    const [loading, setLoading] = useState(true);
     const isOpen = useSelector((state) => state.navBar.isOpen);
     const approvedProducts = useSelector((state) => state.approvedProducts);
     const [searchData, setSearchData] = useState({
@@ -19,7 +21,13 @@ export default function Products() {
     useEffect(() => {
         const renderFun = async () => {
             const data = await fetchApprovedProductsData()
-            dispatch(getApprovedProducts(data))
+            if (data) {
+                dispatch(getApprovedProducts(data));
+
+            }
+
+            setLoading(false);
+
         }
         renderFun()
     }, [])
@@ -44,6 +52,7 @@ export default function Products() {
             return productNameMatch && categoryMatch && vendorMatch;
         });
     }, [approvedProducts, searchData]);
+
     return (
         <div>
             <div className={`search_section_container center ${isOpen ? '' : 'full_layout'}`}>
@@ -83,10 +92,12 @@ export default function Products() {
             </div>
             <div className="Products_container">
                 {
-                    filteredProducts.length > 0 ? (
+                    loading ? (
+                        <Loader />
+                    ) : filteredProducts.length > 0 ? (
                         filteredProducts.map((product, index) => (
                             <Link to={`/products/${product._id}`} key={index}>
-                                <ProductCard >
+                                <ProductCard>
                                     <div className='productImg'>
                                         <img src={`http://localhost:5000/${product.heroImage}`} />
                                     </div>
@@ -107,7 +118,6 @@ export default function Products() {
                         <p className="no-results">No products found</p>
                     )
                 }
-
             </div>
         </div>
     )

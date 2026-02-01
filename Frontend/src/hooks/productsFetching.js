@@ -13,9 +13,13 @@ export const fetchApprovedProductsData = async () => {
                 const sellerRes = await axios.get(
                     `http://localhost:5000/v1/api/users/${product.sellerId}`
                 );
+                const categoryRes = await axios.get(
+                    `http://localhost:5000/v1/api/categories/${product.categoryId}`
+                );
                 return {
                     ...product,
-                    sellerName: sellerRes.data.data.name
+                    sellerName: sellerRes.data.data.name,
+                    categoryName: categoryRes.data.data.name
                 };
             })
         );
