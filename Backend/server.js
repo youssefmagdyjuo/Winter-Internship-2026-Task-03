@@ -9,6 +9,7 @@ const userRoutes = require('./routes/usersRoutes');
 const authUserRoutes = require('./routes/authRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productsRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 const path = require('path');
 
 // Middleware
@@ -26,6 +27,8 @@ app.use('/v1/api/auth', authUserRoutes);
 app.use('/v1/api/categories', categoryRoutes);
 // Use product routes
 app.use('/v1/api/products', productRoutes);
+// Use order routes
+app.use('/v1/api/orders', orderRoutes);
 
 // Define a simple route
 app.get('/', (req, res) => {

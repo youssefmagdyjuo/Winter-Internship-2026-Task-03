@@ -29,9 +29,11 @@ body {
     color: var(--color-secondary);
     background: var(--white);
 }
-.loader{
+
+.loader {
     height: calc(100vh - 20rem);
 }
+
 div img {
     width: 100%;
     object-fit: fill;
@@ -289,9 +291,11 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2rem 4rem;
+    /* padding: 2rem 4rem; */
     gap: 2rem;
-    height: 90vh;
+    height: calc(100vh - 5rem);
+    background: linear-gradient(135deg, rgba(24, 180, 219, 0.1), rgba(43, 67, 81, 0.05));
+
 }
 
 .heroContent {
@@ -299,7 +303,7 @@ h2 {
     flex-direction: column;
     gap: 1rem;
     align-items: center;
-
+    /* background-color: greenyellow; */
 }
 
 .heroContent h1 {
@@ -319,6 +323,24 @@ h2 {
     width: 40rem;
 }
 
+.categories_section {
+    padding: 2rem 1rem;
+}
+
+.Products_container p {
+    color: var(--gray);
+
+}
+.Products_container .card{
+    padding: 3rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.142);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease-in-out;
+    cursor:pointer;
+}
+.Products_container .card:hover{
+    transform: translateY(-4px);
+}
 
 
 .switch_container {
@@ -486,9 +508,11 @@ form ::placeholder {
     margin-left: 0rem;
     padding-left: 0rem;
 }
-.no-results{
+
+.no-results {
     height: calc(100vh - 20rem);
 }
+
 /* ============== Product details page ============== */
 .productImages {
     display: grid;
@@ -719,6 +743,7 @@ table tr:hover {
     padding: 3rem 1.5rem;
 
 }
+
 .footer-inner {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
@@ -751,7 +776,8 @@ table tr:hover {
 
 }
 
-.nav-column h4 ,.footer-subscribe h4 {
+.nav-column h4,
+.footer-subscribe h4 {
     margin: 0 0 0.8rem;
     font-size: 1rem;
     font-weight: 600;

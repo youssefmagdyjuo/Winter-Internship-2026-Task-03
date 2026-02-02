@@ -21,6 +21,15 @@ const orderSchema = new mongoose.Schema(
                 price: {
                     type: Number,
                     required: true
+                },
+                sellerId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: 'User',
+                    required: true
+                },
+                totalItemPrice: {
+                    type: Number,
+                    required: true
                 }
             }
         ],
@@ -30,8 +39,12 @@ const orderSchema = new mongoose.Schema(
         },
         status: {
             type: String,
-            enum: ['pending', 'paid', 'shipped', 'delivered', 'cancelled'],
+            enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled', 'completed'],
             default: 'pending'
+        },
+        isPaid: {
+            type: Boolean,
+            default: false
         }
     },
     { timestamps: true }
