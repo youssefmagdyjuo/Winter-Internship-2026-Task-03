@@ -4,12 +4,17 @@ import { useParams } from 'react-router-dom'
 import Button from '../components/Button'
 import PopUpLayout from '../components/PopUpLayout'
 import Loader from '../components/Loader'
+import Input from '../components/Input'
+import { addToCart } from '../features/cart/cart'
+import { useSelector, useDispatch } from 'react-redux'
 export default function ProductDetails() {
+    const dispatch= useDispatch()
     const [loading, setLoading] = useState(true);
     const { id } = useParams()
     const [product, setProduct] = useState({})
     const [images, setImages] = useState([])
     const [imageUrl, setImageUrl] = useState('')
+    const [quantity, setQuantity] = useState(1)
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -30,7 +35,9 @@ export default function ProductDetails() {
         }
         fetchProduct()
     }, [id])
-
+    const handleAddToCart = ()=>{
+        dispatch(addToCart({ productId:product._id, quantity:quantity,productName:product.title,productImage:product.heroImage,productPrice:product.price }))
+    }
     return (
         <div className='flex flex-col items-center '>
             {
@@ -74,15 +81,17 @@ export default function ProductDetails() {
                                     <td>{product.categoryName}</td>
                                 </tr>
                             </table>
-                            <div style={{paddingBottom:'1rem'}}>
-                                <Button style={'btn-secondary'}>
+                            <div className='flex gap-2' style={{paddingBottom:'1rem'}}>
+                                <Button style={'btn-secondary'} onClick={handleAddToCart}>
                                     <div className="flex gap-2 items-center justify-center">
                                         <i className="fa-solid fa-bag-shopping"></i>
                                         <span>Add to card</span>
                                     </div>
                                 </Button>
+                                <div className='w-30'>
+                                    <Input type={'number'} value={quantity} onChange={(e)=>{setQuantity(+e.target.value)}}/>
+                                </div>
                             </div>
-
                         </>
                     )
             }

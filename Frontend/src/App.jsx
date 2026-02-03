@@ -9,19 +9,28 @@ import Contact from './pages/Contact';
 import ProtectedRoute from './components/ProtectedRoute';
 import AddProduct from './pages/AddProduct';
 import ProductDetails from './pages/ProductDetails';
+import Cart from './pages/Cart';
 function App() {
 
   return (
     <Router>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/login-signup" element={<Login_Sign_Forms />} />
+
+          {/* Public Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/login-signup" element={<Login_Sign_Forms />} />
           <Route path="/products" element={<Products />} />
-          <Route path='/products/:id' element={<ProductDetails />} />
-          <Route path="/add-product" element={<ProtectedRoute><AddProduct /></ProtectedRoute>} />
+          <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route path="/add-product" element={<AddProduct />} />
+            <Route path="/cart" element={<Cart />} />
+          </Route>
+
         </Route>
       </Routes>
     </Router>

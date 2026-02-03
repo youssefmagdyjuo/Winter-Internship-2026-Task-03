@@ -75,7 +75,24 @@ h2 {
     color: white;
 
 }
-
+.cartControl_container{
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(2rem,1fr));
+    gap:0.5rem ;
+    width: 100% ; 
+    max-width: 15rem;
+    margin: 0 auto;
+   
+}
+.cartControl_container span {
+    text-align: center;
+    border: solid 1px var(--color-secondary);
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+    
+}
 .btn-secondary {
     background-color: var(--color-secondary);
     color: white;
