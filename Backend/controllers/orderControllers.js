@@ -59,7 +59,7 @@ const createOrder = async (req, res) => {
 };
 //get all orders
 const getAllOrders = async (req, res) => {
-    let orders;
+    let orders=[];
     try {
         const userRole = req.user.role
         const userId = req.user._id
@@ -73,9 +73,25 @@ const getAllOrders = async (req, res) => {
             orders = await order.find({})
             //if user is seller get orders which contain seller items
         } else if (userRole == 'seller') {
+            //send only items in orders belong to seller
             orders = await order.find({ "items.sellerId": userId })
+            let allSellerItems =[]
+            orders.map((order)=>{
+                let orderObject={
+                    orderStatus:order.status,
+                    orderItems:[]
+                }
+                order.items.map((item)=>{
+                    if (item.sellerId.toString() === userId.toString()){
+                        orderObject.orderItems.push(item)
+                    }
+                })
+                allSellerItems.push(orderObject)
+            })
+            orders =allSellerItems
         }
         res.status(200).json({
+            resulte : orders.length,
             status: 'success',
             message: "orders fetched successfully",
             data: orders
@@ -94,6 +110,7 @@ const updateOrderStatus = async (req, res) => {
         const userId = req.user._id;
         const orderId = req.params.id;
         const { status, items } = req.body;
+        let updatedProduct;
         // find order 
         const foundOrder = await order.findById(orderId);
         if (!foundOrder) {
@@ -108,27 +125,69 @@ const updateOrderStatus = async (req, res) => {
             if (foundOrder.status === 'pending' || foundOrder.status === 'confirmed') {
                 foundOrder.status = 'cancelled';
                 await foundOrder.save();
-            } else {
+            } else if (status == "cancelled" && foundOrder.status == 'cancelled') {
+                return res.status(400).json({ status: 'fail', message: 'Order already cancelled' });
+            }
+            else {
                 return res.status(400).json({ status: 'fail', message: 'Order cannot be cancelled at this stage' });
             }
         }
         // admin can change any time
         else if (userRole === 'admin') {
-            foundOrder.status = status;
-            await foundOrder.save();
+            const isStock = true
+            const outOfStock = []
+            //if admin try to make confirm action
             if (status == 'confirmed') {
-                //update product stock
-                //.......
+                // check order status if pending
+                if (foundOrder.status == 'pending') {
+                    //check befor confirm order if items out of stock or not
+                    //loop in order items
+                    items.map(async (item) => {
+                        const product = await Product.findById(item.productId);
+                        const itemStock = product.stock
+                        if (itemStock < 1) {
+                            outOfStock.push(product.title)
+                            isStock = false
+                        }
+                    })
+                    // if all items in stock so confirm
+                    if (isStock) {
+                        foundOrder.status = 'confirmed';
+                        await foundOrder.save();
+                        //update product stock
+                        //loop in order items to update product stock
+                        items.map(async (item) => {
+                            const product = await Product.findById(item.productId);
+                            const updatedProductStock = Number(product.stock) - Number(item.quantity)
+                            updatedProduct = await Product.findByIdAndUpdate(product._id, { stock: updatedProductStock });
+                        })
+                    } //if any item out of stock return error 
+                    else {
+                        return res.status(400).json({
+                            status: 'fail',
+                            message: 'items out of stock',
+                            data: outOfStock
+                        });
+                    }
+                }
+                //if order status is not pending so admin can not confirm
+                else {
+                    return res.status(400).json({ status: 'fail', message: `status already ${foundOrder.status}` });
+                }
+
+            }
+            // if action not  confirm 
+            else {
+                foundOrder.status = status;
+                await foundOrder.save();
             }
         }
-
         else {
             return res.status(403).json({ status: 'fail', message: 'Access denied' });
         }
-
         res.status(200).json({
             status: 'success',
-            message: 'Order updated successfully',
+            message: `Order updated successfully ${updatedProduct ? 'product stock is updated' : ''}`,
             data: foundOrder
         });
 
