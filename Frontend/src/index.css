@@ -23,6 +23,12 @@
     --gray: #A6A6A6;
     --light-gray: #b8c3c7;
     --white: #ffffff;
+    --green: #18db56d5;
+}
+
+.toastPadding {
+    padding: 1rem;
+    border: solid 2px var(--light-gray);
 }
 
 body {
@@ -75,15 +81,17 @@ h2 {
     color: white;
 
 }
-.cartControl_container{
+
+.cartControl_container {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(2rem,1fr));
-    gap:0.5rem ;
-    width: 100% ; 
+    grid-template-columns: repeat(auto-fit, minmax(2rem, 1fr));
+    gap: 0.5rem;
+    width: 100%;
     max-width: 15rem;
     margin: 0 auto;
-   
+
 }
+
 .cartControl_container span {
     text-align: center;
     border: solid 1px var(--color-secondary);
@@ -91,8 +99,9 @@ h2 {
     padding: 0.6rem;
     border-radius: 0.5rem;
     font-weight: bold;
-    
+
 }
+
 .btn-secondary {
     background-color: var(--color-secondary);
     color: white;
@@ -348,14 +357,16 @@ h2 {
     color: var(--gray);
 
 }
-.Products_container .card{
+
+.Products_container .card {
     padding: 3rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.142);
     border-radius: 0.5rem;
     transition: all 0.3s ease-in-out;
-    cursor:pointer;
+    cursor: pointer;
 }
-.Products_container .card:hover{
+
+.Products_container .card:hover {
     transform: translateY(-4px);
 }
 
@@ -528,6 +539,7 @@ form ::placeholder {
 
 .no-results {
     height: calc(100vh - 20rem);
+    
 }
 
 /* ============== Product details page ============== */
@@ -740,6 +752,11 @@ table tr:hover {
 .about-cta p {
     color: var(--gray);
     margin-bottom: 1.5rem;
+}
+
+.orderBtn {
+    width: 10rem;
+    margin: 1rem auto;
 }
 
 @media (max-width: 836px) {

@@ -7,8 +7,10 @@ import Loader from '../components/Loader'
 import Input from '../components/Input'
 import { addToCart } from '../features/cart/cart'
 import { useSelector, useDispatch } from 'react-redux'
+import Toast from '../components/Toast'
 export default function ProductDetails() {
-    const dispatch= useDispatch()
+    const dispatch = useDispatch()
+    const [openToast, setOpenToast] = useState(false)
     const [loading, setLoading] = useState(true);
     const { id } = useParams()
     const [product, setProduct] = useState({})
@@ -35,8 +37,12 @@ export default function ProductDetails() {
         }
         fetchProduct()
     }, [id])
-    const handleAddToCart = ()=>{
-        dispatch(addToCart({ productId:product._id, quantity:quantity,productName:product.title,productImage:product.heroImage,productPrice:product.price }))
+    const handleAddToCart = () => {
+        dispatch(addToCart({ productId: product._id, quantity: quantity, productName: product.title, productImage: product.heroImage, productPrice: product.price }))
+        setOpenToast(true)
+        setTimeout(() => {
+            setOpenToast(false)
+        }, 3000)
     }
     return (
         <div className='flex flex-col items-center '>
@@ -81,7 +87,7 @@ export default function ProductDetails() {
                                     <td>{product.categoryName}</td>
                                 </tr>
                             </table>
-                            <div className='flex gap-2' style={{paddingBottom:'1rem'}}>
+                            <div className='flex gap-2' style={{ paddingBottom: '1rem' }}>
                                 <Button style={'btn-secondary'} onClick={handleAddToCart}>
                                     <div className="flex gap-2 items-center justify-center">
                                         <i className="fa-solid fa-bag-shopping"></i>
@@ -89,11 +95,17 @@ export default function ProductDetails() {
                                     </div>
                                 </Button>
                                 <div className='w-30'>
-                                    <Input type={'number'} value={quantity} onChange={(e)=>{setQuantity(+e.target.value)}}/>
+                                    <Input type={'number'} value={quantity} onChange={(e) => { setQuantity(+e.target.value) }} />
                                 </div>
                             </div>
                         </>
                     )
+            }
+            {
+                openToast ? (<Toast
+                    message="Product added to cart"
+                    type="success"
+                />) : (<></>)
             }
         </div>
     )

@@ -115,7 +115,7 @@ export default function Products() {
                             </Link>
                         ))
                     ) : (
-                        <p className="no-results">No products found</p>
+                        <p className="no-results center">No products found</p>
                     )
                 }
             </div>

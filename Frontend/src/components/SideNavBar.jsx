@@ -16,6 +16,7 @@ export default function SideNavBar() {
         { name: 'About', path: '/about', icon: 'fa-info-circle' },
         { name: 'Contact', path: '/contact', icon: 'fa-phone' },
         { name: 'Add Product', path: '/add-product', icon: 'fa-plus' },
+        { name: 'Cart', path: '/cart', icon: 'fa-cart-arrow-down' },
     ]);
     const isActiveLink = (path) => location.pathname === path;
     return (
