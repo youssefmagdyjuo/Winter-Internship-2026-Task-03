@@ -2,7 +2,7 @@
 
 * {
     margin: 0;
-    padding: 0;
+    /* padding: 0; */
     border: none;
     box-sizing: border-box;
     list-style: none;
@@ -24,6 +24,7 @@
     --light-gray: #b8c3c7;
     --white: #ffffff;
     --green: #18db56d5;
+    --yellow: rgb(220, 208, 46);
 }
 
 .toastPadding {
@@ -758,7 +759,17 @@ table tr:hover {
     width: 10rem;
     margin: 1rem auto;
 }
+/*=================orders page====================*/
+.ordersTable{
+    margin-top: 5rem;
+}
+.ordersTable td span{
+    padding: 0.5rem 1rem;
 
+}
+.ordersTable th {
+    text-align: center;
+}
 @media (max-width: 836px) {
     .hero-title {
         font-size: 1.8rem;

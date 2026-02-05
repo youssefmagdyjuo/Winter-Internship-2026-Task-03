@@ -41,7 +41,7 @@ const Toast = ({
                 fixed top-[10%] right-4 
                 min-w-[350px] max-w-[400px] 
                 z-100 rounded-lg shadow-xl 
-                 transition-all duration-300 ease-in-out
+                transition-all duration-300 ease-in-out
                 ${toastTypeStyles[type]}
                 animate-fade-in-down toastPadding 
             `}

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { createOrder, getAllOrders, updateOrderStatus } = require('../controllers/orderControllers');
+const {getSpecificOrder, createOrder, getAllOrders, updateOrderStatus } = require('../controllers/orderControllers');
 const { protect } = require('../middleware/protectedRoutes');
 const { allowedTo } = require('../middleware/protectedRoutes');
 
@@ -8,6 +8,7 @@ router.route('/')
     .get(protect, getAllOrders)
 router.route('/:id')
     .put(protect, updateOrderStatus)
+    .get(protect,getSpecificOrder)
 
 
 module.exports = router;

@@ -10,6 +10,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import AddProduct from './pages/AddProduct';
 import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
+import Orders from './pages/Orders';
+import OrderDetails from './pages/OrderDetails';
 function App() {
 
   return (
@@ -29,6 +31,8 @@ function App() {
           <Route element={<ProtectedRoute />}>
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/orders/:id" element={<OrderDetails />} />
           </Route>
 
         </Route>

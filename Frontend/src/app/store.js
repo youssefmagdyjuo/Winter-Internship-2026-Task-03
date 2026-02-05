@@ -5,6 +5,7 @@ import navBarReducer from "../features/puplic/navBar.js";
 import approvedProductsReducer from "../features/products/approvedProducts.js";
 import categoriesReducer from "../features/products/categories.js";
 import cartReducer from "../features/cart/cart.js";
+import allOrdersReducer from "../features/orders/allOrders.js";
 
 // Persist config for cart
 const cartPersistConfig = {
@@ -19,7 +20,8 @@ export const store = configureStore({
         navBar: navBarReducer,
         approvedProducts: approvedProductsReducer,
         categories: categoriesReducer,
-        cart: persistedCartReducer
+        cart: persistedCartReducer,
+        allOrders:allOrdersReducer
     },
 });
 export const persistor = persistStore(store);

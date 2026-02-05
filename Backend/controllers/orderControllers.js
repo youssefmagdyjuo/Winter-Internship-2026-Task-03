@@ -23,6 +23,7 @@ const createOrder = async (req, res) => {
                     quantity: item.quantity,
                     price: product.price,
                     sellerId: product.sellerId,
+                    productName:product.title,
                     //calc item total praice
                     totalItemPrice: Number(item.quantity) * Number(product.price)
                 };
@@ -59,7 +60,7 @@ const createOrder = async (req, res) => {
 };
 //get all orders
 const getAllOrders = async (req, res) => {
-    let orders=[];
+    let orders = [];
     try {
         const userRole = req.user.role
         const userId = req.user._id
@@ -75,23 +76,23 @@ const getAllOrders = async (req, res) => {
         } else if (userRole == 'seller') {
             //send only items in orders belong to seller
             orders = await order.find({ "items.sellerId": userId })
-            let allSellerItems =[]
-            orders.map((order)=>{
-                let orderObject={
-                    orderStatus:order.status,
-                    orderItems:[]
+            let allSellerItems = []
+            orders.map((order) => {
+                let orderObject = {
+                    orderStatus: order.status,
+                    orderItems: []
                 }
-                order.items.map((item)=>{
-                    if (item.sellerId.toString() === userId.toString()){
+                order.items.map((item) => {
+                    if (item.sellerId.toString() === userId.toString()) {
                         orderObject.orderItems.push(item)
                     }
                 })
                 allSellerItems.push(orderObject)
             })
-            orders =allSellerItems
+            orders = allSellerItems
         }
         res.status(200).json({
-            resulte : orders.length,
+            resulte: orders.length,
             status: 'success',
             message: "orders fetched successfully",
             data: orders
@@ -187,7 +188,7 @@ const updateOrderStatus = async (req, res) => {
         }
         res.status(200).json({
             status: 'success',
-            message: `Order updated successfully ${updatedProduct ? 'product stock is updated' : ''}`,
+            message: ` ${userRole =='customer'?"Order cancelled successfully":"Order updated successfully"} ${updatedProduct ? 'product stock is updated' : ''}`,
             data: foundOrder
         });
 
@@ -198,8 +199,28 @@ const updateOrderStatus = async (req, res) => {
         });
     }
 };
+const getSpecificOrder = async (req, res) => {
+    try {
+        const { id } = req.params
+        const foundOrder = await order.findById(id)
+        if (!foundOrder) {
+            return res.status(404).json({ message: 'order not found' });
+        }
+        res.json({
+            status: 'success',
+            message: 'order fetched successfully',
+            data: foundOrder,
+        });
+    } catch (error) {
+        res.status(500).json({
+            status: 'fail',
+            message: err.message,
+        });
+    }
+}
 module.exports = {
     createOrder,
     getAllOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    getSpecificOrder
 };
