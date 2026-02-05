@@ -24,7 +24,7 @@ export default function Cart() {
     const dispatch = useDispatch()
 
     if (items.length === 0) {
-        return <p className='no-results center'>Your cart is empty</p>
+        return <h2 className='minHeight center'>Your cart is empty:)</h2>
     }
     const handlePlaceOrder = async () => {
         try {

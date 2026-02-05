@@ -10,7 +10,7 @@ export default function SideNavBar() {
     const dispatch = useDispatch();
     const isOpen = useSelector((state) => state.navBar.isOpen);
     const location = useLocation();
-    const [links, setLinks] = React.useState([
+    const links=[
         { name: 'Home', path: '/', icon: 'fa-home' },
         { name: 'Products', path: '/products', icon: 'fa-bag-shopping' },
         { name: 'About', path: '/about', icon: 'fa-info-circle' },
@@ -18,7 +18,7 @@ export default function SideNavBar() {
         { name: 'Add Product', path: '/add-product', icon: 'fa-plus' },
         { name: 'Cart', path: '/cart', icon: 'fa-cart-arrow-down' },
         { name: 'Orders', path: '/orders', icon: 'fa-hand' },
-    ]);
+    ];
     const isActiveLink = (path) => location.pathname === path;
     return (
         <div className={`side_navbar_container ${isOpen ? 'navBar_opened' : 'navBar_closed'}`}>

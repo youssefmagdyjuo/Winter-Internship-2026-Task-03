@@ -569,7 +569,9 @@ form ::placeholder {
     align-items: center;
     justify-content: center;
 }
-
+.minHeight{
+    min-height: calc(100vh - 5rem);
+}
 table {
     width: 97%;
     max-width: 50rem;

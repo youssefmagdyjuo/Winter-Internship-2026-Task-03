@@ -10,10 +10,8 @@ const protect = async (req, res, next) => {
             token = req.headers.authorization.split(' ')[1];
             //2) Verify token (is changed or expired?)
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
-            console.log(decoded)
             //3) if user still exists
             const currentUser = await user.findById(decoded.id);
-            console.log("req.user " + currentUser)
             if (!currentUser) {
                 return res.status(401).json({ message: 'The user belonging to this token does no longer exist.' });
             }
@@ -21,7 +19,6 @@ const protect = async (req, res, next) => {
             if (currentUser.passwordChangedAt) {
                 //iat to timestamp 
                 const changedTimestamp = parseInt(currentUser.passwordChangedAt.getTime() / 1000, 10);
-                console.log(changedTimestamp, decoded.iat);
                 if (decoded.iat < changedTimestamp) {
                     return res.status(401).json({ message: 'Password has been changed please login agin.' });
                 }

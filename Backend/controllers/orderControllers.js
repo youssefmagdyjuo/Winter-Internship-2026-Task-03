@@ -23,7 +23,7 @@ const createOrder = async (req, res) => {
                     quantity: item.quantity,
                     price: product.price,
                     sellerId: product.sellerId,
-                    productName:product.title,
+                    productName: product.title,
                     //calc item total praice
                     totalItemPrice: Number(item.quantity) * Number(product.price)
                 };
@@ -73,24 +73,24 @@ const getAllOrders = async (req, res) => {
         else if (userRole == 'admin') {
             orders = await order.find({})
             //if user is seller get orders which contain seller items
-        } else if (userRole == 'seller') {
-            //send only items in orders belong to seller
-            orders = await order.find({ "items.sellerId": userId })
-            let allSellerItems = []
-            orders.map((order) => {
-                let orderObject = {
-                    orderStatus: order.status,
-                    orderItems: []
-                }
-                order.items.map((item) => {
-                    if (item.sellerId.toString() === userId.toString()) {
-                        orderObject.orderItems.push(item)
-                    }
-                })
-                allSellerItems.push(orderObject)
-            })
-            orders = allSellerItems
+        } else if (userRole === 'seller') {
+            orders = await order.find({ "items.sellerId": userId });
+            orders = orders.map((ord) => {
+                const filteredItems = ord.items.filter(
+                    (item) => item.sellerId.toString() === userId.toString()
+                );
+                const totalAmount = filteredItems.reduce(
+                    (acc, item) => acc + item.totalItemPrice,  // أو item.price * item.quantity
+                    0
+                );
+                return {
+                    ...ord._doc,
+                    items: filteredItems,
+                    totalAmount
+                };
+            });
         }
+
         res.status(200).json({
             resulte: orders.length,
             status: 'success',
@@ -188,7 +188,7 @@ const updateOrderStatus = async (req, res) => {
         }
         res.status(200).json({
             status: 'success',
-            message: ` ${userRole =='customer'?"Order cancelled successfully":"Order updated successfully"} ${updatedProduct ? 'product stock is updated' : ''}`,
+            message: ` ${userRole == 'customer' ? "Order cancelled successfully" : "Order updated successfully"} ${updatedProduct ? 'product stock is updated' : ''}`,
             data: foundOrder
         });
 
@@ -201,23 +201,38 @@ const updateOrderStatus = async (req, res) => {
 };
 const getSpecificOrder = async (req, res) => {
     try {
-        const { id } = req.params
-        const foundOrder = await order.findById(id)
+        const { id } = req.params;
+        const userRole = req.user.role;
+        const userId = req.user._id;
+        let foundOrder = await order.findById(id).lean();
         if (!foundOrder) {
-            return res.status(404).json({ message: 'order not found' });
+            return res.status(404).json({ message: 'Order not found' });
         }
+
+        if (userRole === 'seller') {            
+            const filteredItems = foundOrder.items.filter(
+                (item) => item.sellerId.toString() === userId.toString()
+            );
+            const totalAmount = filteredItems.reduce(
+                (acc, item) => acc + item.totalItemPrice,
+                0
+            );
+            foundOrder = { ...foundOrder, items: filteredItems, totalAmount };
+        }
+
         res.json({
             status: 'success',
-            message: 'order fetched successfully',
+            message: 'Order fetched successfully',
             data: foundOrder,
         });
-    } catch (error) {
+    } catch (err) {
         res.status(500).json({
             status: 'fail',
             message: err.message,
         });
     }
-}
+};
+
 module.exports = {
     createOrder,
     getAllOrders,

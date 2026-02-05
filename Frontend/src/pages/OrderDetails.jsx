@@ -30,6 +30,7 @@ export default function OrderDetails() {
                     }
                 );
                 setOrder(response.data.data);
+                console.log(response.data.data);
                 setLoading(false);
             } catch (error) {
                 console.log(error);
@@ -73,7 +74,7 @@ export default function OrderDetails() {
     }
 
     return (
-        <div className="flex flex-col items-center p-6">
+        <div className="flex flex-col items-center p-6 minHeight">
             {
                 openToast ? (<Toast
                     message={message.text}

@@ -32,6 +32,8 @@ export default function Orders() {
                     }
                 )
                 dispatch(getallOrders(response.data.data))
+                console.log(response.data.data);
+                
             } catch (error) {
                 console.log(error)
             } finally {
@@ -93,7 +95,7 @@ export default function Orders() {
             </div>
 
             {/* Orders List */}
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto minHeight">
                 {
                     loading ? (
                         <Loader />
