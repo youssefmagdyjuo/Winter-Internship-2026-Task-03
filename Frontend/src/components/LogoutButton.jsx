@@ -1,15 +1,14 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
 import Button from "./Button";
+import {clearCart} from '../features/cart/cart'
+import { useDispatch } from 'react-redux'
 
 export default function LogoutButton() {
-    // const navigate = useNavigate();
-
+    const dispatch = useDispatch()
     const handleLogout = () => {
         // 1️⃣ مسح token و user
         localStorage.removeItem("mvec_token");
         localStorage.removeItem("mvec-user");
-
+        dispatch(clearCart())
         // 2️⃣ redirect للـ Login
         location.replace("/login-signup");
     }

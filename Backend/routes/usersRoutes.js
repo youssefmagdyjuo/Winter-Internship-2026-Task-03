@@ -1,10 +1,13 @@
 const router = require('express').Router();
-const { getAllUsers, addUser,getSpecificUser,updateUser,deleteUser ,updatePassword} = require('../controllers/usersControllers');
+const {getUserRole, getAllUsers, addUser,getSpecificUser,updateUser,deleteUser ,updatePassword} = require('../controllers/usersControllers');
 const { protect } = require('../middleware/protectedRoutes');
+
 router.route('/')
     .get(getAllUsers)
     .post(addUser);
-    
+router.route('/userRole')
+    .get(protect, getUserRole)
+
 router.route('/:id')
     .get(getSpecificUser)
     .put(updateUser)

@@ -95,7 +95,7 @@ export default function Orders() {
             </div>
 
             {/* Orders List */}
-            <div className="w-full overflow-x-auto minHeight">
+            <div className="w-full overflow-x-auto">
                 {
                     loading ? (
                         <Loader />

@@ -6,7 +6,19 @@ import PopUpLayout from "../components/PopUpLayout";
 import Button from "../components/Button";
 import Toast from "../components/Toast";
 import { useNavigate } from "react-router-dom";
+import { getUserRole } from "../hooks/user";
+import Selector from '../components/Selector';
+
 export default function OrderDetails() {
+    // role base 
+    const [userRole, setUserRole] = useState('')
+    useEffect(() => {
+        const fetchRole = async () => {
+            const role = await getUserRole();
+            setUserRole(role)
+        }
+        fetchRole()
+    }, [])
     const navigate = useNavigate()
     const { id } = useParams();
     const [openToast, setOpenToast] = useState(false)
@@ -18,6 +30,38 @@ export default function OrderDetails() {
         text: '',
         type: ''
     })
+    const statusOptions = [
+        'pending',
+        'confirmed',
+        'shipped',
+        'delivered',
+        'cancelled',
+        'completed'
+    ].map(status => ({
+        value: status,
+        label: status.charAt(0).toUpperCase() + status.slice(1)
+    }));
+    const [orderFormFields, setOrderFormFields] = useState([
+        {
+            name: 'orderStatus',
+            value: '',
+            placeholder: 'Order Status'
+        }
+    ]);
+
+    const handleInputChange = (e, fieldName) => {
+        const value = e.target.value;
+
+        setOrderFormFields(prev =>
+            prev.map(field =>
+                field.name === fieldName
+                    ? { ...field, value }
+                    : field
+            )
+        );
+    };
+
+
     useEffect(() => {
         const fetchOrder = async () => {
             try {
@@ -43,35 +87,45 @@ export default function OrderDetails() {
     if (loading) return <Loader />;
 
     if (!order) return <p>Order not found</p>;
-    const handleCancelOrder = async () => {
+    const handleOrderStatusChanged = async () => {
+        const selectedStatus = orderFormFields.find(
+            f => f.name === 'orderStatus'
+        )?.value;
+
+        if (!selectedStatus) {
+            setMessage({ text: "Please select a status first", type: "error" });
+            setOpenToast(true);
+            return;
+        }
+
         try {
             const response = await axios.put(
                 `http://localhost:5000/v1/api/orders/${id}`,
-                { status: "cancelled" },
+                { status: selectedStatus },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 }
-            )
-            setMessage({ text: response.data.message, type: 'success' })
-            setOpenToast(true)
-            setTimeout(() => navigate('/orders'), 3000)
+            );
+
+            setMessage({ text: response.data.message, type: 'success' });
+            setOpenToast(true);
+            setTimeout(() => navigate('/orders'), 3000);
 
         } catch (error) {
             setMessage({
                 text: error.response?.data?.message || "Something went wrong",
                 type: 'error'
-            })
-            setOpenToast(true)
-            setIsOpen(false)
+            });
+            setOpenToast(true);
+            setIsOpen(false);
+        } finally {
+            setTimeout(() => setOpenToast(false), 3000);
+            setIsOpen(false);
         }
-        finally {
-            setTimeout(() => setOpenToast(false), 3000)
-            setIsOpen(false)
-            
-        }
-    }
+    };
+
 
     return (
         <div className="flex flex-col items-center p-6 minHeight">
@@ -143,15 +197,44 @@ export default function OrderDetails() {
                     ))}
                 </tbody>
             </table>
-            <div className="orderBtn mt-4">
-                <Button
-                    style="btn-danger"
-                    disabled={order.isCompleted}
-                    onClick={() => setIsOpen(true)}
-                >
-                    {order.isCompleted ? "Order Completed" : "Cancel Order"}
-                </Button>
-            </div>
+
+            {
+                userRole && userRole == 'customer'
+                    ? (<>
+                        <div className="orderBtn mt-4">
+                            <Button
+                                style="btn-danger"
+                                disabled={order.status !== 'pending' && order.status !== 'confirmed'}
+                                onClick={() => { setOrderStatus('cancelled'), setIsOpen(true) }}
+                            >
+                                {order.status == 'completed' ? "Order Completed" : "Cancel Order"}
+                            </Button>
+                        </div>
+                    </>)
+                    : userRole && userRole == 'admin'
+                        ? (<>
+                            <div className="w-100 mt-4 flex gap-4">
+                                <Selector
+                                    options={statusOptions}
+                                    placeholder="Status..."
+                                    onChange={(selected) =>
+                                        handleInputChange(
+                                            { target: { value: selected.value } },
+                                            'orderStatus'
+                                        )
+                                    }
+                                />
+
+                                <Button
+                                    style="btn-primary"
+                                    onClick={handleOrderStatusChanged}
+                                >
+                                    Update
+                                </Button>
+                            </div>
+                        </>)
+                        : (<></>)
+            }
             <PopUpLayout open={isOpen}>
                 <div className="flex flex-col justify-between gap-4">
                     <p className="text-xl text-center">
@@ -161,7 +244,7 @@ export default function OrderDetails() {
                     <div className="flex gap-2 justify-center">
                         <Button
                             style="btn-danger"
-                            onClick={handleCancelOrder}
+                            onClick={() => { handleOrderStatusChanged() }}
                         >
                             Yes, Cancel
                         </Button>

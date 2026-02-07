@@ -39,7 +39,7 @@ export default function Contact() {
         </PopUpLayout>;
     }
     return (
-        <div>
+        <div >
             <FormLayout
                 onSubmit={handleSubmit}
             >

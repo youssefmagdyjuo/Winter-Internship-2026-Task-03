@@ -12,6 +12,7 @@ import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import OrderDetails from './pages/OrderDetails';
+import Dashboard from './pages/admin/Dashboard';
 function App() {
 
   return (
@@ -32,7 +33,9 @@ function App() {
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/orders" element={<Orders />} />
-            <Route path="/orders/:id" element={<OrderDetails />} />          </Route>
+            <Route path="/orders/:id" element={<OrderDetails />} />
+            <Route path="/admin-dashboard" element={<Dashboard />} />
+          </Route>
 
         </Route>
       </Routes>

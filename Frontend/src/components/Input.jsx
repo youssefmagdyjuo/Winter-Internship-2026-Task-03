@@ -11,7 +11,8 @@ const Input = forwardRef(({
     style,
     id,
     list,
-    required
+    required,
+    checked
 }, ref) => {
     return (
         <input
@@ -29,6 +30,7 @@ const Input = forwardRef(({
             id={id}
             list={list}
             required={required}
+            checked={checked}
         />
     );
 });

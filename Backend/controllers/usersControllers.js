@@ -1,11 +1,20 @@
 const user = require('../models/userModel');
 const bcrypt = require('bcryptjs');
-
+//function to get user role
+const getUserRole = async (req, res) => {
+    try {
+        const userRole = req.user.role
+        res.send(userRole)
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 // Function to get all users
 const getAllUsers = async (req, res) => {
     try {
         const users = await user.find();
         res.json({
+            resulte: users.length,
             status: 'success',
             message: 'Users fetched successfully',
             data: users,
@@ -108,4 +117,4 @@ const deleteUser = async (req, res) => {
     }
 };
 
-module.exports = { getAllUsers, addUser, getSpecificUser, updateUser, deleteUser, updatePassword };
+module.exports = {getUserRole, getAllUsers, addUser, getSpecificUser, updateUser, deleteUser, updatePassword };

@@ -10,7 +10,7 @@ export default function Layout() {
     return (
         <div className='relative'>
             <UpperNavBar />
-            <div className={`layout ${isOpen ? '' : 'full_layout'}`}>
+            <div className={`layout ${isOpen ? '' : 'full_layout'} minHeight`}>
                 <SideNavBar />
                 <Outlet />
             </div>

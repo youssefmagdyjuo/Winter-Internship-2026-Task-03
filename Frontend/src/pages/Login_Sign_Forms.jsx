@@ -15,7 +15,8 @@ export default function Login_Sign_Forms() {
     const [signupData, setSignupData] = useState({
         name: '',
         email: '',
-        password: ''
+        password: '',
+        role: 'customer'
     });
     const handleLoginSubmit = async (e) => {
         // Handle login form submission
@@ -44,13 +45,15 @@ export default function Login_Sign_Forms() {
             setSignupData({
                 name: '',
                 email: '',
-                password: ''
+                password: '',
+                role:'customer'
             });
             localStorage.setItem("mvec_token", response.data.token);
             localStorage.setItem("mvec-user", JSON.stringify(response.data.data.name));
             location.replace("/");
         } catch (error) {
             console.error("Signup error:", error.response?.data || error.message);
+            console.error(error);
         }
     }
     return (
@@ -67,9 +70,31 @@ export default function Login_Sign_Forms() {
                             <Input onChange={(e) => setSignupData({ ...signupData, name: e.target.value })} value={signupData.name} placeholder="Name" />
                             <Input onChange={(e) => setSignupData({ ...signupData, email: e.target.value })} value={signupData.email} placeholder="Email" />
                             <Input onChange={(e) => setSignupData({ ...signupData, password: e.target.value })} value={signupData.password} placeholder="Password" type="password" />
-                            {/* <div style={{ width: '10rem' }} > */}
+                            {/* Role Selection */}
+                            <div className="radio-group">
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <Input
+                                        onChange={(e) => setSignupData({ ...signupData, role: e.target.value })}
+                                        value={"customer"}
+                                        type="radio"
+                                        name="role"
+                                        checked={signupData.role === 'customer'}
+                                    />
+                                    Customer
+                                </label>
+
+                                <label className="flex items-center gap-2 cursor-pointer">
+                                    <Input
+                                        onChange={(e) => setSignupData({ ...signupData, role: e.target.value })}
+                                        value={"seller"}
+                                        type="radio"
+                                        name="role"
+                                        checked={signupData.role === 'seller'}
+                                    />
+                                    Seller
+                                </label>
+                            </div>
                             <Button onClick={handleSignupSubmit} style={'btn-primary'}>Sign Up</Button>
-                            {/* </div> */}
                         </>
                     )
                     : (

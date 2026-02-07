@@ -8,7 +8,17 @@ import Input from '../components/Input'
 import { addToCart } from '../features/cart/cart'
 import { useSelector, useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
+import { getUserRole } from '../hooks/user'
 export default function ProductDetails() {
+    // role base 
+    const [userRole, setUserRole] = useState('')
+    useEffect(() => {
+        const fetchRole = async () => {
+            const role = await getUserRole();
+            setUserRole(role)
+        }
+        fetchRole()
+    }, [])
     const dispatch = useDispatch()
     const [openToast, setOpenToast] = useState(false)
     const [loading, setLoading] = useState(true);
@@ -87,17 +97,24 @@ export default function ProductDetails() {
                                     <td>{product.categoryName}</td>
                                 </tr>
                             </table>
-                            <div className='flex gap-2' style={{ paddingBottom: '1rem' }}>
-                                <Button style={'btn-secondary'} onClick={handleAddToCart}>
-                                    <div className="flex gap-2 items-center justify-center">
-                                        <i className="fa-solid fa-bag-shopping"></i>
-                                        <span>Add to card</span>
-                                    </div>
-                                </Button>
-                                <div className='w-30'>
-                                    <Input type={'number'} value={quantity} onChange={(e) => { setQuantity(+e.target.value) }} />
-                                </div>
-                            </div>
+
+                            {
+                                userRole && userRole=='customer'
+                                    ? (<>
+                                        <div className='flex gap-2' style={{ paddingBottom: '1rem' }}>
+                                            <Button style={'btn-secondary'} onClick={handleAddToCart}>
+                                                <div className="flex gap-2 items-center justify-center">
+                                                    <i className="fa-solid fa-bag-shopping"></i>
+                                                    <span>Add to card</span>
+                                                </div>
+                                            </Button>
+                                            <div className='w-30'>
+                                                <Input type={'number'} value={quantity} onChange={(e) => { setQuantity(+e.target.value) }} />
+                                            </div>
+                                        </div>
+                                    </>)
+                                    : (<></>)
+                            }
                         </>
                     )
             }

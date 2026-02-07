@@ -4,11 +4,14 @@ const { createToken } = require('../../utils/auth');
 // Function for user signup
 const signup = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        let { name, email, password, role } = req.body;
         // Check if user with the same email already exists
         const exists = await user.findOne({ email });
         if (exists) {
             return res.status(400).json({ message: "Email already exists" });
+        }
+        if(role!=='seller' && role!=='customer'){
+            role='customer'
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const userData = { name, email, password: hashedPassword, role };

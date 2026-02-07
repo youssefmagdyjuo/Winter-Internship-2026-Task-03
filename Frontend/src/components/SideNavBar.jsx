@@ -1,32 +1,67 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleNavBar } from '../features/puplic/navBar.js';
 import LogoutButton from './LogoutButton.jsx';
+import { getUserRole } from '../hooks/user.js';
 export default function SideNavBar() {
+    // role base 
+    const [userRole, setUserRole] = useState('')
+    useEffect(() => {
+        const fetchRole = async () => {
+            const role = await getUserRole();
+            setUserRole(role)
+        }
+        fetchRole()
+    }, [])
     const storedUser = localStorage.getItem("mvec-user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const dispatch = useDispatch();
     const isOpen = useSelector((state) => state.navBar.isOpen);
     const location = useLocation();
-    const links=[
+    let links = [
         { name: 'Home', path: '/', icon: 'fa-home' },
         { name: 'Products', path: '/products', icon: 'fa-bag-shopping' },
         { name: 'About', path: '/about', icon: 'fa-info-circle' },
         { name: 'Contact', path: '/contact', icon: 'fa-phone' },
-        { name: 'Add Product', path: '/add-product', icon: 'fa-plus' },
-        { name: 'Cart', path: '/cart', icon: 'fa-cart-arrow-down' },
-        { name: 'Orders', path: '/orders', icon: 'fa-hand' },
     ];
+    if (userRole) {
+        links.push(
+            ...[
+                { name: 'Orders', path: '/orders', icon: 'fa-hand' },
+            ]
+        );
+    }
+    if (userRole === 'admin') {
+        links.push(
+            ...[
+                { name: 'Admin Dashboard', path: '/admin-dashboard', icon: 'fa-grip' },
+
+            ]
+        );
+    } else if (userRole === 'seller') {
+        links.push(
+            ...[
+                { name: 'Add Product', path: '/add-product', icon: 'fa-plus' },
+            ]
+        );
+    } else if (userRole === 'customer') {
+        links.push(
+            ...[
+                { name: 'Cart', path: '/cart', icon: 'fa-cart-arrow-down' },
+            ]
+        );
+    }
+
     const isActiveLink = (path) => location.pathname === path;
     return (
         <div className={`side_navbar_container ${isOpen ? 'navBar_opened' : 'navBar_closed'}`}>
-            <span 
-            className={`btn_sideNavBar center ${isOpen?'-right-4':'-right-9'}`}
-            onClick={()=>{dispatch(toggleNavBar())}}
+            <span
+                className={`btn_sideNavBar center ${isOpen ? '-right-4' : '-right-9'}`}
+                onClick={() => { dispatch(toggleNavBar()) }}
             >
-                <i class={`fa-solid fa-circle-arrow-${isOpen?'left':'right'}`}></i>
+                <i class={`fa-solid fa-circle-arrow-${isOpen ? 'left' : 'right'}`}></i>
             </span>
             <nav className='side_navbar'>
                 <ul className='side_navbar_links'>
@@ -45,7 +80,7 @@ export default function SideNavBar() {
                                 <LogoutButton />
                             </>)
                             : (<>
-                                <Link to={'/login-signup'}>
+                                <Link to={'/login-signup'}onClick={()=>{dispatch(toggleNavBar())}} >
                                     <li className={`link ${isActiveLink('/login-signup') ? 'active_link' : ''}`}>
                                         <i className={` fa-solid fa-user mr-2`}></i>
                                         Login
