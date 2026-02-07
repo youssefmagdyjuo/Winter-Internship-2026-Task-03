@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
 import { getUserRole } from '../hooks/user'
 export default function ProductDetails() {
+    const token = localStorage.getItem('mvec_token')
     // role base 
     const [userRole, setUserRole] = useState('')
     useEffect(() => {
@@ -27,6 +28,10 @@ export default function ProductDetails() {
     const [images, setImages] = useState([])
     const [imageUrl, setImageUrl] = useState('')
     const [quantity, setQuantity] = useState(1)
+    const [message, setMessage] = useState({
+        text: '',
+        type: ''
+    })
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -54,8 +59,35 @@ export default function ProductDetails() {
             setOpenToast(false)
         }, 3000)
     }
+    const aproveProduct = async () => {
+        try {
+            const response = await axios.put(`http://localhost:5000/v1/api/products/status/${id}`,
+                { isApproved: "approved" },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+            setMessage({
+                text: response.data.message,
+                type: 'success'
+            })
+            setOpenToast(true);
+
+        } catch (error) {
+            console.log(error)
+            setMessage({
+                text: error.message,
+                type: 'error'
+            })
+            setOpenToast(true);
+        } finally {
+            setTimeout(() => setOpenToast(false), 3000);
+        }
+    }
     return (
-        <div className='flex flex-col items-center '>
+        <div className='flex flex-col items-center pb-20'>
             {
                 loading ? (<Loader />)
                     : (
@@ -99,7 +131,7 @@ export default function ProductDetails() {
                             </table>
 
                             {
-                                userRole && userRole=='customer'
+                                userRole && userRole == 'customer'
                                     ? (<>
                                         <div className='flex gap-2' style={{ paddingBottom: '1rem' }}>
                                             <Button style={'btn-secondary'} onClick={handleAddToCart}>
@@ -113,15 +145,32 @@ export default function ProductDetails() {
                                             </div>
                                         </div>
                                     </>)
-                                    : (<></>)
+                                    : userRole && userRole == 'admin'
+                                        ? (<>
+                                            <div className="flex gap-2 justify-center w-100">
+                                                <Button
+                                                    style="btn-primary"
+                                                    onClick={aproveProduct}
+                                                >
+                                                    Aprove
+                                                </Button>
+                                                <Button
+
+                                                    style="btn-danger"
+                                                >
+                                                    reject
+                                                </Button>
+                                            </div>
+                                        </>)
+                                        : (<></>)
                             }
                         </>
                     )
             }
             {
                 openToast ? (<Toast
-                    message="Product added to cart"
-                    type="success"
+                    message={message.text}
+                    type={message.type}
                 />) : (<></>)
             }
         </div>
