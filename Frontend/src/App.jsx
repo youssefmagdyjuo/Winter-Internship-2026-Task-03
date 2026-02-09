@@ -13,6 +13,8 @@ import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import OrderDetails from './pages/OrderDetails';
 import Dashboard from './pages/admin/Dashboard';
+import NotAuthorized from './pages/NotAuthorized';
+import AuthRoute from './components/AuthRoute';
 function App() {
 
   return (
@@ -27,14 +29,25 @@ function App() {
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/notAuthorized" element={<NotAuthorized />} />
 
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/add-product" element={<AddProduct />} />
-            <Route path="/cart" element={<Cart />} />
+            {/* admin pages  */}
+            <Route element={<AuthRoute role='admin' />}>
+              <Route path="/admin-dashboard" element={<Dashboard />} />
+            </Route>
+            {/* seller pages  */}
+            <Route element={<AuthRoute role='seller' />}>
+              <Route path="/add-product" element={<AddProduct />} />
+            </Route>
+            {/* customer pages  */}
+            <Route element={<AuthRoute role='customer' />}>
+              <Route path="/cart" element={<Cart />} />
+            </Route>
+            {/*  pages for all  */}
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:id" element={<OrderDetails />} />
-            <Route path="/admin-dashboard" element={<Dashboard />} />
           </Route>
 
         </Route>

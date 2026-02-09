@@ -10,6 +10,7 @@ const authUserRoutes = require('./routes/authRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const productRoutes = require('./routes/productsRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const statisticsRoutes = require('./routes/statisticsRoutes');
 const path = require('path');
 
 // Middleware
@@ -29,6 +30,8 @@ app.use('/v1/api/categories', categoryRoutes);
 app.use('/v1/api/products', productRoutes);
 // Use order routes
 app.use('/v1/api/orders', orderRoutes);
+// Use statistics routes for admin only
+app.use('/v1/api/statistics', statisticsRoutes);
 
 // Define a simple route
 app.get('/', (req, res) => {
