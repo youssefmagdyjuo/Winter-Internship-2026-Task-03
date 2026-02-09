@@ -6,10 +6,12 @@ import PopUpLayout from '../components/PopUpLayout'
 import Loader from '../components/Loader'
 import Input from '../components/Input'
 import { addToCart } from '../features/cart/cart'
-import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
 import { getUserRole } from '../hooks/user'
 export default function ProductDetails() {
+    const [rejectReason, setRejectReason] = useState("");
     const token = localStorage.getItem('mvec_token')
     // role base 
     const [userRole, setUserRole] = useState('')
@@ -21,6 +23,8 @@ export default function ProductDetails() {
         fetchRole()
     }, [])
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [isOpen, setIsOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
     const [loading, setLoading] = useState(true);
     const { id } = useParams()
@@ -83,8 +87,41 @@ export default function ProductDetails() {
             })
             setOpenToast(true);
         } finally {
-            setTimeout(() => setOpenToast(false), 3000);
+            setTimeout(() => { navigate('/admin-dashboard'), setOpenToast(false) }, 3000);
         }
+    }
+    const handleRejection = async () => {
+        try {
+            //update product to rejected
+            //send message to seller
+            const response = await axios.put(`http://localhost:5000/v1/api/products/status/${id}`,
+                { isApproved: "rejected", rejectReason: rejectReason },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            )
+            setMessage({
+                text: response.data.message,
+                type: 'success'
+            })
+            setOpenToast(true);
+
+        } catch (error) {
+            console.log(error)
+            setMessage({
+                text: error.message,
+                type: 'error'
+            })
+            setOpenToast(true);
+        } finally {
+            //navigate to dashboard
+            //close toaster
+            setTimeout(() => { setOpenToast(false), navigate('/admin-dashboard') }, 3000);
+        }
+        //close PopUpLayout
+        setIsOpen(false)
     }
     return (
         <div className='flex flex-col items-center pb-20'>
@@ -128,6 +165,14 @@ export default function ProductDetails() {
                                     <th>Category:</th>
                                     <td>{product.categoryName}</td>
                                 </tr>
+                                {
+                                    userRole && userRole == 'admin'
+                                        ? <tr>
+                                            <th>Status:</th>
+                                            <td>{product.isApproved}</td>
+                                        </tr>
+                                        : <></>
+                                }
                             </table>
 
                             {
@@ -155,7 +200,7 @@ export default function ProductDetails() {
                                                     Aprove
                                                 </Button>
                                                 <Button
-
+                                                    onClick={() => setIsOpen(true)}
                                                     style="btn-danger"
                                                 >
                                                     reject
@@ -173,6 +218,33 @@ export default function ProductDetails() {
                     type={message.type}
                 />) : (<></>)
             }
+            <PopUpLayout open={isOpen}>
+                <div className="flex flex-col justify-between gap-4">
+                    <p className="text-xl text-center">
+                        Reasons for rejection
+                    </p>
+                    <form action="">
+                        <textarea name="Rejection Reasons" placeholder='Why..' onChange={(e) => { setRejectReason(e.target.value) }}></textarea>
+                    </form>
+                    <div className="flex gap-2 justify-center">
+                        <Button
+                            style="btn-danger"
+                            onClick={() => {
+                                handleRejection()
+                            }}
+                        >
+                            reject
+                        </Button>
+
+                        <Button
+                            onClick={() => setIsOpen(false)}
+                            style="btn-secondary"
+                        >
+                            cancle
+                        </Button>
+                    </div>
+                </div>
+            </PopUpLayout>
         </div>
     )
 }

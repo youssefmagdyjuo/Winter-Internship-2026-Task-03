@@ -1,4 +1,5 @@
 const product = require('../models/productModel');
+const sendEmail = require('../utils/sendEmail');
 
 // Function to get all products
 const getAllProducts = async (req, res) => {
@@ -180,13 +181,38 @@ const updateProduct = async (req, res) => {
 const updateProductStatus = async (req, res) => {
     try {
         const productId = req.params.id;
+        const { rejectReason } = req.body || null
+
         const updateData = {
             isApproved: req.body.isApproved,
         };
-        const updatedProduct = await product.findByIdAndUpdate(productId, updateData, { new: true });
+        const updatedProduct = await product.findByIdAndUpdate(productId, updateData, { new: true }).populate("sellerId");
         if (!updatedProduct) {
             return res.status(404).json({ message: 'Product not found' });
         }
+        if (updateData.isApproved === 'rejected' && rejectReason) {
+            await sendEmail(
+                updatedProduct.sellerId.email,
+                "Product Rejected",
+                `Hello ${updatedProduct.sellerId.name || ""},
+Your product has been rejected.
+Reason:
+${rejectReason}
+Please review and resubmit if necessary.
+                `
+            );
+        }
+        if (updateData.isApproved === 'approved') {
+            await sendEmail(
+                updatedProduct.sellerId.email,
+                "Product Approved",
+                `Hello ${updatedProduct.sellerId.name || ""},
+Great news 🎉
+Your product has been approved and is now live on the platform.
+                `
+            );
+        }
+
         res.json({
             status: 'success',
             message: 'Product status updated successfully',

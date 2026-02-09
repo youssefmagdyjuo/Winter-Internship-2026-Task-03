@@ -143,7 +143,7 @@ export default function ProductsManagement() {
                                             ${product.isApproved === "approved"
                                                     ? "bg-[var(--green)]"
                                                     : product.isApproved === "rejected"
-                                                        ? "bg-[--color-danger]"
+                                                        ? "bg-[var(--color-danger)]"
                                                         : product.isApproved === "pending"
                                                             ? "bg-[var(--yellow)]"
                                                             : ""
