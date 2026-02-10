@@ -53,6 +53,13 @@ export default function SideNavBar() {
             ]
         );
     }
+    if (userRole) {
+        links.push(
+            ...[
+                { name: 'Profile', path: '/profile', icon: 'fa-solid fa-user' },
+            ]
+        );
+    }
 
     const isActiveLink = (path) => location.pathname === path;
     return (
@@ -80,7 +87,7 @@ export default function SideNavBar() {
                                 <LogoutButton />
                             </>)
                             : (<>
-                                <Link to={'/login-signup'}onClick={()=>{dispatch(toggleNavBar())}} >
+                                <Link to={'/login-signup'} onClick={() => { dispatch(toggleNavBar()) }} >
                                     <li className={`link ${isActiveLink('/login-signup') ? 'active_link' : ''}`}>
                                         <i className={` fa-solid fa-user mr-2`}></i>
                                         Login
@@ -92,12 +99,14 @@ export default function SideNavBar() {
             </nav>
             {
                 user
-                    ? (<>
-                        <div className='accountLink'>
-                            <i className={`center flex bg-white text-[var(--color-secondary)]  w-8 h-8 rounded-full  fa-solid fa-user mr-2`}></i>
-                            {user}
-                        </div>
-                    </>)
+                    ? (
+                        <Link to={'/profile'} onClick={() => { dispatch(toggleNavBar()) }}>
+                            <div className='accountLink'>
+                                <i className={`center flex bg-white text-[var(--color-secondary)]  w-8 h-8 rounded-full  fa-solid fa-user mr-2`}></i>
+                                {user}
+                            </div>
+                        </Link>
+                    )
                     : (<></>)
             }
 

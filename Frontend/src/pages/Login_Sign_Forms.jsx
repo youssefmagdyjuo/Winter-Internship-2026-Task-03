@@ -30,6 +30,7 @@ export default function Login_Sign_Forms() {
             });
             localStorage.setItem("mvec_token", response.data.token);
             localStorage.setItem("mvec-user", JSON.stringify(response.data.data.name));
+            localStorage.setItem("mvec-email", JSON.stringify(response.data.data.email));
             location.replace("/");
         } catch (error) {
             console.log(error);
@@ -50,6 +51,7 @@ export default function Login_Sign_Forms() {
             });
             localStorage.setItem("mvec_token", response.data.token);
             localStorage.setItem("mvec-user", JSON.stringify(response.data.data.name));
+            localStorage.setItem("mvec-email", JSON.stringify(response.data.data.email));
             location.replace("/");
         } catch (error) {
             console.error("Signup error:", error.response?.data || error.message);

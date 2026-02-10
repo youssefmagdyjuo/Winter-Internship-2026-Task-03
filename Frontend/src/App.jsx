@@ -15,6 +15,8 @@ import OrderDetails from './pages/OrderDetails';
 import Dashboard from './pages/admin/Dashboard';
 import NotAuthorized from './pages/NotAuthorized';
 import AuthRoute from './components/AuthRoute';
+import Profile from './pages/Profile';
+import NotFound from './pages/NotFound';
 function App() {
 
   return (
@@ -30,7 +32,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/notAuthorized" element={<NotAuthorized />} />
-
+          <Route path="/*" element={<NotFound />} />
           {/* Protected Routes */}
           <Route element={<ProtectedRoute />}>
             {/* admin pages  */}
@@ -46,6 +48,7 @@ function App() {
               <Route path="/cart" element={<Cart />} />
             </Route>
             {/*  pages for all  */}
+            <Route path="/profile" element={<Profile />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:id" element={<OrderDetails />} />
           </Route>

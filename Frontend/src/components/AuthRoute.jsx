@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { getUserRole } from '../hooks/user';
+import Loader from "./Loader";
 
 const AuthRoute = ({ role }) => {
     // role base 
@@ -12,7 +13,7 @@ const AuthRoute = ({ role }) => {
         }
         fetchRole()
     }, [])
-    if (!userRole) return <div>Loading...</div>;
+    if (!userRole) return <Loader />
     if (role == userRole) {
         return <Outlet />
     } else {

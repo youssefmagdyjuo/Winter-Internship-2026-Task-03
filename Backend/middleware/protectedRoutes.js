@@ -25,6 +25,8 @@ const protect = async (req, res, next) => {
             }
             //Grant access to protected route
             req.user = currentUser;
+            console.log(req.user);
+            
             next();
         } catch (err) {
             return res.status(401).json({ message: err.message });
