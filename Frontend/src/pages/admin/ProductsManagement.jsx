@@ -6,7 +6,7 @@ import { fetchAllProducts } from '../../hooks/productsFetching'
 import { Link } from 'react-router-dom'
 import Loader from '../../components/Loader'
 
-export default function ProductsManagement() {
+export default function ProductsManagement({statusType}) {
     const [loading, setLoading] = useState(true)
     const isOpen = useSelector((state) => state.navBar.isOpen)
     const [allProducts, setAllProducts] = useState([])
@@ -14,7 +14,7 @@ export default function ProductsManagement() {
         productName: '',
         categoryName: '',
         vendorName: '',
-        status: 'pending'
+        status: statusType
     })
 
     // Fetch Products

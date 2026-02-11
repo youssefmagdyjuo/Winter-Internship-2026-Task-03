@@ -196,6 +196,7 @@ h2 {
 .add_file_input {
     text-align: left;
     color: var(--color-secondary);
+    cursor: cell;
 }
 
 .input:focus {

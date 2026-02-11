@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '../components/Button'
 import PopUpLayout from '../components/PopUpLayout'
 import Input from '../components/Input'
@@ -7,7 +7,18 @@ import { clearCart } from '../features/cart/cart'
 import { useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
 import CreateNewUser from '../components/CreateNewUser'
+import { getUserRole } from '../hooks/user'
+import ProductsManagement from './admin/ProductsManagement'
 export default function Profile() {
+    // role base 
+    const [userRole, setUserRole] = useState('')
+    useEffect(() => {
+        const fetchRole = async () => {
+            const role = await getUserRole();
+            setUserRole(role)
+        }
+        fetchRole()
+    }, [])
     const userName = JSON.parse(localStorage.getItem('mvec-user'))
     const userEmail = JSON.parse(localStorage.getItem('mvec-email'))
     const token = localStorage.getItem('mvec_token')
@@ -22,11 +33,9 @@ export default function Profile() {
     const [currentPass, setCurrentPass] = useState('')
     const [newPass, setNewPassPass] = useState('')
     const handleLogout = () => {
-        // 1️⃣ مسح token و user
         localStorage.removeItem("mvec_token");
         localStorage.removeItem("mvec-user");
         dispatch(clearCart())
-        // 2️⃣ redirect للـ Login
         location.replace("/login-signup");
     }
     const handleChangePass = async () => {
@@ -83,19 +92,32 @@ export default function Profile() {
                     </table>
                 </div>
                 <div className="controlersBox">
-                    <p onClick={() => { setView('create_new_user') }}>Create new user</p>
-                    <p>controller</p>
-                    <p>controller</p>
+                    <h3 className='font-bold'>Controllers:</h3>
+                    {
+                        userRole && userRole == 'admin'
+                            ? (<>
+                                <p onClick={() => { setView('create_new_user') }}>Create new user</p>
+                                <p onClick={() => { setView('site_mode') }}>Site Mode</p>
+                            </>)
+                            : userRole && userRole == 'seller'
+                                ? (<>
+                                    <p onClick={() => { setView('seller_product') }}>My Products</p>
+                                </>)
+                                : userRole && userRole == 'customer'
+                                    ? (<>customer</>)
+                                    : (<></>)
+                    }
+
                 </div>
             </div>
             <div className='h-[2px] bg-[var(--gray)] w-[50%] mb-8 m-auto rounded'></div>
             <div className="profileChangingBox">
                 {
                     view == 'create_new_user'
-                        ? (<>
-                            <CreateNewUser token={token}/>
-                        </>)
-                        : (<></>)
+                        ? (<CreateNewUser token={token} />)
+                        : view == 'seller_product'
+                            ? (<ProductsManagement statusType={''}/>)
+                            : (<></>)
                 }
             </div>
             <PopUpLayout open={isOpen}>

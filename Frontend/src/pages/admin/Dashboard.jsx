@@ -41,7 +41,7 @@ export default function Dashboard() {
                     view == 'orders'
                         ? (<><Orders /></>)
                         : view == 'products'
-                            ? (<ProductsManagement />)
+                            ? (<ProductsManagement statusType={'pending'}/>)
                             : view == 'statistics'
                                 ? (<Statistics />)
                                 : (<></>)

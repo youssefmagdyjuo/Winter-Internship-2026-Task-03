@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
 import { getUserRole } from '../hooks/user'
+import AddProduct from './AddProduct'
 export default function ProductDetails() {
     const [rejectReason, setRejectReason] = useState("");
     const token = localStorage.getItem('mvec_token')
@@ -25,6 +26,7 @@ export default function ProductDetails() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [isOpen, setIsOpen] = useState(false)
+    const [editingMode, setEditingMode] = useState(false)
     const [openToast, setOpenToast] = useState(false)
     const [loading, setLoading] = useState(true);
     const { id } = useParams()
@@ -123,6 +125,32 @@ export default function ProductDetails() {
         //close PopUpLayout
         setIsOpen(false)
     }
+    const handleRemoveProduct = async () => {
+        try {
+            const response = await axios.delete(`http://localhost:5000/v1/api/products/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            setMessage({
+                text: response.data.message,
+                type: 'success'
+            })
+            setOpenToast(true);
+            setTimeout(() => { navigate('/profile') }, 3000);
+        } catch (error) {
+            console.log(error)
+            setMessage({
+                text: error.response.data.message,
+                type: 'error'
+            })
+            setOpenToast(true);
+        } finally {
+            setTimeout(() => { setOpenToast(false) }, 3000);
+        }
+        //close PopUpLayout
+        setIsOpen(false)
+    }
     return (
         <div className='flex flex-col items-center pb-20'>
             {
@@ -194,20 +222,38 @@ export default function ProductDetails() {
                                         ? (<>
                                             <div className="flex gap-2 justify-center w-100">
                                                 <Button
+                                                    disabled={product.isApproved == 'approved'}
                                                     style="btn-primary"
                                                     onClick={aproveProduct}
                                                 >
-                                                    Aprove
+                                                    Approve
                                                 </Button>
                                                 <Button
                                                     onClick={() => setIsOpen(true)}
                                                     style="btn-danger"
                                                 >
-                                                    reject
+                                                    Reject
                                                 </Button>
                                             </div>
                                         </>)
-                                        : (<></>)
+                                        : userRole && userRole == 'seller'
+                                            ? (<>
+                                                <div className="flex gap-2 justify-center w-100">
+                                                    <Button
+                                                        style="btn-primary"
+                                                        onClick={() => { setEditingMode(true) }}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                    <Button
+                                                        onClick={() => setIsOpen(true)}
+                                                        style="btn-danger"
+                                                    >
+                                                        Remove
+                                                    </Button>
+                                                </div>
+                                            </>)
+                                            : (<></>)
                             }
                         </>
                     )
@@ -221,21 +267,37 @@ export default function ProductDetails() {
             <PopUpLayout open={isOpen}>
                 <div className="flex flex-col justify-between gap-4">
                     <p className="text-xl text-center">
-                        Reasons for rejection
+                        {userRole == 'admin' ? "Reasons for rejection" : userRole == 'seller' ? 'Are you sure you want to remove this product ?' : ''}
                     </p>
-                    <form action="">
-                        <textarea name="Rejection Reasons" placeholder='Why..' onChange={(e) => { setRejectReason(e.target.value) }}></textarea>
-                    </form>
+                    {
+                        userRole && userRole == 'admin'
+                            ? (<form action="">
+                                <textarea name="Rejection Reasons" placeholder='Why..' onChange={(e) => { setRejectReason(e.target.value) }}></textarea>
+                            </form>)
+                            : (<></>)
+                    }
                     <div className="flex gap-2 justify-center">
-                        <Button
-                            style="btn-danger"
-                            onClick={() => {
-                                handleRejection()
-                            }}
-                        >
-                            reject
-                        </Button>
-
+                        {
+                            userRole && userRole == 'admin'
+                                ? (<Button
+                                    style="btn-danger"
+                                    onClick={() => {
+                                        handleRejection()
+                                    }}
+                                >
+                                    Reject
+                                </Button>)
+                                : userRole && userRole == 'seller'
+                                    ? (<Button
+                                        style="btn-danger"
+                                        onClick={() => {
+                                            handleRemoveProduct()
+                                        }}
+                                    >
+                                        Remove
+                                    </Button>)
+                                    : (<></>)
+                        }
                         <Button
                             onClick={() => setIsOpen(false)}
                             style="btn-secondary"
@@ -243,6 +305,16 @@ export default function ProductDetails() {
                             cancle
                         </Button>
                     </div>
+                </div>
+            </PopUpLayout>
+            {/* editing mode for seller only*/}
+            <PopUpLayout open={editingMode}>
+                <div className="flex flex-col justify-between gap-2">
+                    <i
+                        onClick={() => { setEditingMode(false) }}
+                        class="cursor-pointer text-3xl text-right w-full fa-regular fa-circle-xmark">
+                    </i>
+                    <AddProduct isEditing={true} productId={id} setEditingMode={setEditingMode}/>
                 </div>
             </PopUpLayout>
         </div>

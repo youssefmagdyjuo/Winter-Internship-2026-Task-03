@@ -5,12 +5,14 @@ const sendEmail = require('../utils/sendEmail');
 const getAllProducts = async (req, res) => {
     try {
         let filter = {};
-
+        if (req.user?.role === 'seller') {
+            // Set sellerId filter 
+            filter.sellerId = req.user._id;
+        }
         // Apply query filters if any
         if (req.query) {
-            filter = { ...req.query };
+            filter = { ...filter, ...req.query };
         }
-
         const products = await product.find(filter);
 
         res.json({
@@ -151,32 +153,71 @@ const addProduct = async (req, res) => {
         });
     }
 };
-//update product
+// Update Product
 const updateProduct = async (req, res) => {
     try {
         const productId = req.params.id;
-        const updateData = {
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
-            category: req.body.category,
-        };
-        const updatedProduct = await product.findByIdAndUpdate(productId, updateData, { new: true });
-        if (!updatedProduct) {
-            return res.status(404).json({ message: 'Product not found' });
+
+        const existingProduct = await product.findById(productId);
+        if (!existingProduct) {
+            return res.status(404).json({
+                status: 'fail',
+                message: 'Product not found'
+            });
         }
-        res.json({
+
+        // Basic fields
+        const {
+            title,
+            description,
+            price,
+            stock,
+            categoryId
+        } = req.body;
+
+        // Handle hero image
+        let heroImage = existingProduct.heroImage;
+        if (req.files?.heroImage) {
+            heroImage = req.files.heroImage[0].path.replace(/\\/g, "/");
+        }
+
+        // Handle gallery images
+        let images = existingProduct.images;
+        if (req.files?.images) {
+            images = req.files.images.map(file =>
+                file.path.replace(/\\/g, "/")
+            );
+        }
+
+        const updatedProduct = await product.findByIdAndUpdate(
+            productId,
+            {
+                title,
+                description,
+                price,
+                stock,
+                categoryId,
+                heroImage,
+                images,
+                isApproved: 'pending' 
+            },
+            { new: true }
+        );
+
+        res.status(200).json({
             status: 'success',
             message: 'Product updated successfully',
-            data: updatedProduct,
+            data: updatedProduct
         });
+
     } catch (err) {
         res.status(500).json({
             status: 'fail',
-            message: err.message,
+            message: err.message
         });
     }
 };
+
 //update product status admin only
 const updateProductStatus = async (req, res) => {
     try {
@@ -225,7 +266,6 @@ Your product has been approved and is now live on the platform.
         });
     }
 };
-
 // Function to delete a product
 const deleteProduct = async (req, res) => {
     try {

@@ -7,9 +7,11 @@ import Selector from '../components/Selector';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../features/products/categories'
 import { fetchCategories } from '../hooks/productsFetching';
-export default function AddProduct() {
+import Toast from '../components/Toast';
+export default function AddProduct({ isEditing = false, productId ,setEditingMode}) {
     //variables & states
     const dispatch = useDispatch()
+    const [openToast, setOpenToast] = useState(false)
     const categories = useSelector((state) => state.categories) || [];
     const heroImageRef = useRef();
     const imagesRef = useRef();
@@ -61,7 +63,10 @@ export default function AddProduct() {
     ])
     const heroImageField = productFormFields.find(f => f.name === 'heroImage');
     const imagesField = productFormFields.find(f => f.name === 'images');
-
+    const [message, setMessage] = useState({
+        text: '',
+        type: ''
+    })
     //fetching categories
     useEffect(() => {
         const renderFun = async () => {
@@ -70,6 +75,46 @@ export default function AddProduct() {
         }
         renderFun()
     }, [])
+    useEffect(() => {
+        if (isEditing && productId) {
+            const fetchProduct = async () => {
+                try {
+                    const token = localStorage.getItem('mvec_token');
+
+                    const res = await axios.get(
+                        `http://localhost:5000/v1/api/products/${productId}`,
+                        {
+                            headers: { Authorization: `Bearer ${token}` }
+                        }
+                    );
+
+                    const productData = res.data.data;
+
+                    setProductFormFields(prev =>
+                        prev.map(field => {
+                            // متحطش الصور في file input
+                            if (field.type === 'file') {
+                                return {
+                                    ...field,
+                                    value: field.multiple ? [] : null
+                                };
+                            }
+
+                            return {
+                                ...field,
+                                value: productData[field.name] ?? field.value
+                            };
+                        })
+                    );
+
+                } catch (err) {
+                    console.error(err);
+                }
+            };
+
+            fetchProduct();
+        }
+    }, [isEditing, productId]);
 
     //handle options to send it to selector
     const categoryOptions = categories.map(c => ({
@@ -108,7 +153,7 @@ export default function AddProduct() {
             )
         );
     };
-
+    // add function 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -143,19 +188,96 @@ export default function AddProduct() {
             );
             console.log('Product added:', response.data);
             resetProductFormFields()
+            setMessage({
+                text: response.data.message,
+                type: 'success'
+            })
+            setOpenToast(true);
         } catch (err) {
             console.error(err);
+            setMessage({
+                text: err.response.data.message,
+                type: 'error'
+            })
+            setOpenToast(true);
+        } finally {
+            setTimeout(() => { setOpenToast(false) }, 3000);
+        }
+    };
+    // edit function 
+    const handleEditSubmit = async (e, productId) => {
+        e.preventDefault();
+
+        try {
+            const formData = new FormData();
+
+            // append normal fields
+            productFormFields.forEach(field => {
+                if (field.type !== 'file') {
+                    formData.append(field.name, field.value);
+                }
+            });
+
+            const heroImageField = productFormFields.find(f => f.name === 'heroImage');
+            if (heroImageField?.value) {
+                formData.append('heroImage', heroImageField.value);
+            }
+
+            const imagesField = productFormFields.find(f => f.name === 'images');
+            if (imagesField?.value?.length > 0) {
+                imagesField.value.forEach(file => {
+                    formData.append('images', file);
+                });
+            }
+
+            const token = localStorage.getItem('mvec_token');
+
+            const response = await axios.put(
+                `http://localhost:5000/v1/api/products/${productId}`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            setMessage({
+                text: response.data.message,
+                type: 'success'
+            })
+            setOpenToast(true);
+            
+        } catch (err) {
+            console.error(err);
+            setMessage({
+                text: err.response.data.message,
+                type: 'error'
+            })
+            setOpenToast(true);
+        } finally {
+            setTimeout(() => { setOpenToast(false) ,setEditingMode(false)}, 3000);
         }
     };
 
 
     return (
         <div>
+            {
+                openToast ? (<Toast
+                    message={message.text}
+                    type={message.type}
+                />) : (<></>)
+            }
             <FormLayout
-                onSubmit={handleSubmit}
+                full_H={!isEditing}
+                onSubmit={(e) =>
+                    isEditing
+                        ? handleEditSubmit(e, productId)
+                        : handleSubmit(e)
+                }
                 enctype={'multipart/form-data'}
             >
-                <h2 className='title'>Add Product</h2>
+                <h2 className='title'>{isEditing ? '' : 'Add Product'}</h2>
                 {/* render inputs fields  */}
                 {productFormFields
                     .filter(field => field.name !== 'categoryId')
@@ -204,7 +326,7 @@ export default function AddProduct() {
                     }
                 </button>
                 <Button style={"btn-primary "}>
-                    Add
+                    {isEditing ? 'Edit' : 'Add'}
                 </Button>
             </FormLayout>
         </div>
