@@ -6,14 +6,17 @@ import { toggleNavBar } from '../features/puplic/navBar.js';
 import LogoutButton from './LogoutButton.jsx';
 import { getUserRole } from '../hooks/user.js';
 export default function SideNavBar() {
+    const token = localStorage.getItem('mvec_token')
     // role base 
     const [userRole, setUserRole] = useState('')
     useEffect(() => {
-        const fetchRole = async () => {
-            const role = await getUserRole();
-            setUserRole(role)
+        if (token) {
+            const fetchRole = async () => {
+                const role = await getUserRole();
+                setUserRole(role)
+            }
+            fetchRole()
         }
-        fetchRole()
     }, [])
     const storedUser = localStorage.getItem("mvec-user");
     const user = storedUser ? JSON.parse(storedUser) : null;
@@ -68,7 +71,7 @@ export default function SideNavBar() {
                 className={`btn_sideNavBar center ${isOpen ? '-right-4' : '-right-9'}`}
                 onClick={() => { dispatch(toggleNavBar()) }}
             >
-                <i class={`fa-solid fa-circle-arrow-${isOpen ? 'left' : 'right'}`}></i>
+                <i className={`fa-solid fa-circle-arrow-${isOpen ? 'left' : 'right'}`}></i>
             </span>
             <nav className='side_navbar'>
                 <ul className='side_navbar_links'>
@@ -100,7 +103,7 @@ export default function SideNavBar() {
             {
                 user
                     ? (
-                        <Link to={'/profile'} onClick={() => { dispatch(toggleNavBar()) }}>
+                        <Link to={'/profile'} onClick={() => { if (window.innerWidth < 1024) { dispatch(toggleNavBar()); } }}>
                             <div className='accountLink'>
                                 <i className={`center flex bg-white text-[var(--color-secondary)]  w-8 h-8 rounded-full  fa-solid fa-user mr-2`}></i>
                                 {user}

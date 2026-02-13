@@ -1,12 +1,14 @@
 import { Link } from "react-router-dom";
 import Button from "../components/Button";
+import VantaBackGround from "../components/BG/VantaBackGround";
 
 export default function Home() {
     return (
         <div>
 
             {/* Hero Section */}
-            <section className="heroSection">
+            <section className="heroSection center">
+                <VantaBackGround />
                 <div className="heroContent">
                     <h1>Viteruca</h1>
                     <p>
@@ -36,9 +38,9 @@ export default function Home() {
 
                 <div className="Products_container">
                     {["Electronics", "Fashion", "Home", "Sports"].map((cat, index) => (
-                            <div key={index} className="center card">
-                                <h3 className="title">{cat}</h3>
-                            </div>
+                        <div key={index} className="center card">
+                            <h3 className="title">{cat}</h3>
+                        </div>
                     ))}
                 </div>
             </section>

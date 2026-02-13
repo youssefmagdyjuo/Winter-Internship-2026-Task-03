@@ -16,14 +16,12 @@ export default function About() {
                     <p className="hero-sub">We connect creators and customers by building a secure, simple, and delightful shopping experience.</p>
                     <div className="hero-actions">
                         <Link to={'/products'}>
-                            <div className='w-60'>
                                 <Button style={'btn-primary'}>
                                     Browse Products
                                 </Button>
-                            </div>
                         </Link>
                         <Link to={'/contact'}>
-                            <div className='w-60'>
+                            <div className='w-40'>
                                 <Button style={'btn-secondary'}>
                                     Contact Us
                                 </Button>

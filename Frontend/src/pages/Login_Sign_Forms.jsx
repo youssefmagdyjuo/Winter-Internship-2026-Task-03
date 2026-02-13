@@ -63,15 +63,15 @@ export default function Login_Sign_Forms() {
             <SwitchTogil onClick={() => { setFormType(formType == 'signup' ? 'login' : 'signup') }}>
                 <p className={formType == 'signup' ? 'text-white' : ''}>Sign up</p>
                 <p className={formType == 'login' ? 'text-white' : ''}>Log in</p>
-                <span className={formType == 'signup' ? 'left-0' : 'left-91.5'}></span>
+                <span className={formType == 'signup' ? 'left-0' : 'left-[calc(100%-10rem)]'}></span>
             </SwitchTogil>
             {
                 formType == 'signup'
                     ? (
                         <>
-                            <Input onChange={(e) => setSignupData({ ...signupData, name: e.target.value })} value={signupData.name} placeholder="Name" />
-                            <Input onChange={(e) => setSignupData({ ...signupData, email: e.target.value })} value={signupData.email} placeholder="Email" />
-                            <Input onChange={(e) => setSignupData({ ...signupData, password: e.target.value })} value={signupData.password} placeholder="Password" type="password" />
+                            <Input onChange={(e) => setSignupData({ ...signupData, name: e.target.value })} value={signupData.name} placeholder="Name" required={true}/>
+                            <Input onChange={(e) => setSignupData({ ...signupData, email: e.target.value })} value={signupData.email} placeholder="Email" type='email'required={true}/>
+                            <Input onChange={(e) => setSignupData({ ...signupData, password: e.target.value })} value={signupData.password} placeholder="Password" type="password" required={true}/>
                             {/* Role Selection */}
                             <div className="radio-group">
                                 <label className="flex items-center gap-2 cursor-pointer">
@@ -101,8 +101,8 @@ export default function Login_Sign_Forms() {
                     )
                     : (
                         <>
-                            <Input onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} value={loginData.email} placeholder="Email" />
-                            <Input onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} value={loginData.password} placeholder="Password" type="password" />
+                            <Input onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} value={loginData.email} placeholder="Email" type='email' required={true}/>
+                            <Input onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} value={loginData.password} placeholder="Password" type="password" required={true}/>
                             {/* <div style={{ width: '10rem' }} > */}
                             <Button onClick={handleLoginSubmit} style={'btn-primary'}>Log In</Button>
                             {/* </div> */}

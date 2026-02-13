@@ -1,11 +1,12 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Footer() {
     return (
         <footer className="site-footer">
             <div className="container footer-inner">
                 <div className="footer-brand">
-                    <a className="logo" href="/">Marketplace</a>
+                    <Link className="logo" to="/">Viteruca Marketplace</Link>
                     <p className="tagline">Handpicked products from creators worldwide.</p>
                 </div>
 
@@ -13,17 +14,9 @@ export default function Footer() {
                     <div className="nav-column">
                         <h4>Company</h4>
                         <ul>
-                            <li><a href="/about">About</a></li>
-                            <li><a href="/contact">Contact</a></li>
-                            <li><a href="/terms">Terms</a></li>
-                        </ul>
-                    </div>
-                    <div className="nav-column">
-                        <h4>Support</h4>
-                        <ul>
-                            <li><a href="/faq">Help Center</a></li>
-                            <li><a href="/shipping">Shipping</a></li>
-                            <li><a href="/returns">Returns</a></li>
+                            <li><Link to="/about">About</Link></li>
+                            <li><Link to="/contact">Contact</Link></li>
+                            <li><Link to="/products">Products</Link></li>
                         </ul>
                     </div>
                 </nav>

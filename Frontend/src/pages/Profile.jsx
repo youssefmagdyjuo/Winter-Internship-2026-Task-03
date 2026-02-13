@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
 import CreateNewUser from '../components/CreateNewUser'
 import { getUserRole } from '../hooks/user'
-import ProductsManagement from './admin/ProductsManagement'
+import ProductsManagement from './ProductsManagement'
 export default function Profile() {
     // role base 
     const [userRole, setUserRole] = useState('')
@@ -116,7 +116,7 @@ export default function Profile() {
                     view == 'create_new_user'
                         ? (<CreateNewUser token={token} />)
                         : view == 'seller_product'
-                            ? (<ProductsManagement statusType={''}/>)
+                            ? (<ProductsManagement statusType={''} />)
                             : (<></>)
                 }
             </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getUserRole } from '../../hooks/user'
 import Orders from '../Orders'
 import Statistics from './Statistics'
-import ProductsManagement from './ProductsManagement'
+import ProductsManagement from '../ProductsManagement'
 
 export default function Dashboard() {
     const [userRole, setUserRole] = useState('')

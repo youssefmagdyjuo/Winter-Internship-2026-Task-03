@@ -1,12 +1,13 @@
 
 import React, { useEffect, useMemo, useState } from 'react'
-import Input from '../../components/Input'
+import Input from '../components/Input'
 import { useSelector } from 'react-redux'
-import { fetchAllProducts } from '../../hooks/productsFetching'
+import { fetchAllProducts } from '../hooks/productsFetching'
 import { Link } from 'react-router-dom'
-import Loader from '../../components/Loader'
+import Loader from '../components/Loader'
+import { getUserRole } from '../hooks/user'
 
-export default function ProductsManagement({statusType}) {
+export default function ProductsManagement({ statusType }) {
     const [loading, setLoading] = useState(true)
     const isOpen = useSelector((state) => state.navBar.isOpen)
     const [allProducts, setAllProducts] = useState([])
@@ -16,7 +17,15 @@ export default function ProductsManagement({statusType}) {
         vendorName: '',
         status: statusType
     })
-
+    // role base 
+    const [userRole, setUserRole] = useState('')
+    useEffect(() => {
+        const fetchRole = async () => {
+            const role = await getUserRole();
+            setUserRole(role)
+        }
+        fetchRole()
+    }, [])
     // Fetch Products
     useEffect(() => {
         const renderFun = async () => {
@@ -86,17 +95,19 @@ export default function ProductsManagement({statusType}) {
                             }))
                         }
                     />
+                    {
+                        userRole == 'admin' ? <Input
+                            placeholder="Vendor Name"
+                            value={searchData.vendorName}
+                            onChange={(e) =>
+                                setSearchData(prev => ({
+                                    ...prev,
+                                    vendorName: e.target.value
+                                }))
+                            }
+                        /> : ''
+                    }
 
-                    <Input
-                        placeholder="Vendor Name"
-                        value={searchData.vendorName}
-                        onChange={(e) =>
-                            setSearchData(prev => ({
-                                ...prev,
-                                vendorName: e.target.value
-                            }))
-                        }
-                    />
                     <Input
                         placeholder="Status"
                         value={searchData.status}
@@ -111,7 +122,7 @@ export default function ProductsManagement({statusType}) {
             </div>
 
             {/* Products Table */}
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto p-4">
                 {
                     loading ? (
                         <Loader />
@@ -123,7 +134,7 @@ export default function ProductsManagement({statusType}) {
                                     <th>Product</th>
                                     <th>Status</th>
                                     <th>Category</th>
-                                    <th>Vendor</th>
+                                    {userRole == 'admin' ? <th>Vendor</th> : ''}
                                     <th>Price</th>
                                     <th>Stock</th>
                                     <th>Details</th>
@@ -155,11 +166,12 @@ export default function ProductsManagement({statusType}) {
                                         <td >
                                             {product.categoryName}
                                         </td>
-
-                                        <td >
-                                            {product.sellerName}
-                                        </td>
-
+                                        {
+                                            userRole == 'admin' ?
+                                                <td >
+                                                    {product.sellerName}
+                                                </td> : ''
+                                        }
                                         <td className="font-bold">
                                             {product.price}$
                                         </td>

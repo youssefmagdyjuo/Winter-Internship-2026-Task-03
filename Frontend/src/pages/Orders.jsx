@@ -95,7 +95,7 @@ export default function Orders() {
             </div>
 
             {/* Orders List */}
-            <div className="w-full overflow-x-auto">
+            <div className="w-full overflow-x-auto p-4">
                 {
                     loading ? (
                         <Loader />
