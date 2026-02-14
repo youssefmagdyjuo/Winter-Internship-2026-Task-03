@@ -99,7 +99,7 @@ export default function Products() {
                             <Link to={`/products/${product._id}`} key={index}>
                                 <ProductCard>
                                     <div className='productImg'>
-                                        <img src={`http://localhost:5000/${product.heroImage}`} />
+                                        <img src={`${import.meta.env.VITE_API_URL}/${product.heroImage}`} />
                                     </div>
 
                                     <div className="productContent">

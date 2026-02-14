@@ -169,8 +169,8 @@ export default function ProductDetails() {
                             {product.heroImage && (
                                 <div className='productImages'>
                                     {images.map((i, index) => (
-                                        <div key={index} className='img cursor-pointer' onClick={() => { setImageUrl(`http://localhost:5000/${i}`) }}>
-                                            <img src={`http://localhost:5000/${i}`} alt={`product-${index}`} />
+                                        <div key={index} className='img cursor-pointer' onClick={() => { setImageUrl(`${import.meta.env.VITE_API_URL}/${i}`) }}>
+                                            <img src={`${import.meta.env.VITE_API_URL}/${i}`} alt={`product-${index}`} />
                                         </div>
                                     ))}
                                 </div>
