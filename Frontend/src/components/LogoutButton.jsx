@@ -8,6 +8,7 @@ export default function LogoutButton() {
         // 1️⃣ مسح token و user
         localStorage.removeItem("mvec_token");
         localStorage.removeItem("mvec-user");
+        localStorage.removeItem("mvec-email");
         dispatch(clearCart())
         // 2️⃣ redirect للـ Login
         location.replace("/login-signup");
