@@ -57,7 +57,7 @@ export default function Products() {
         <div>
             <div className={`search_section_container center ${isOpen ? '' : 'full_layout'}`}>
                 <div className="search_section">
-                    <span className='text-lg w-full center font-bold'>Search by: </span>
+                    <span className=' w-full center font-bold'>Search by: </span>
                     <Input
                         placeholder={"Product Name"}
                         value={searchData.productName}
