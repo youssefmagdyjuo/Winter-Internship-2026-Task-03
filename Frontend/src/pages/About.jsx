@@ -21,11 +21,9 @@ export default function About() {
                                 </Button>
                         </Link>
                         <Link to={'/contact'}>
-                            <div className='w-40'>
                                 <Button style={'btn-secondary'}>
                                     Contact Us
                                 </Button>
-                            </div>
                         </Link>
                     </div>
                 </div>
