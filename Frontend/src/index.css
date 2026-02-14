@@ -72,7 +72,7 @@ h2 {
 
 .btn {
     padding: 0.6rem 1rem;
-    border-radius: 0.5rem;
+    border-radius: 5.5rem;
     font-weight: 500;
     transition: all 200ms;
     cursor: pointer;
@@ -1181,7 +1181,7 @@ table th {
 @media (max-width: 680px) {
 
     .heroContent h1 {
-        font-size: 2rem;
+        font-size: 3.5rem;
     }
 
     .heroContent p {
