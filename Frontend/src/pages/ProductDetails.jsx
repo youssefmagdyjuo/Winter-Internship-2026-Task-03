@@ -41,9 +41,9 @@ export default function ProductDetails() {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.BACKEND_BASEURL}/v1/api/products/${id}`)
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}/v1/api/products/${id}`)
                 const data = response.data.data
-                const response2 = await axios.get(`${import.meta.env.BACKEND_BASEURL}/v1/api/categories/${data.categoryId}`)
+                const response2 = await axios.get(`${import.meta.env.VITE_API_URL}/v1/api/categories/${data.categoryId}`)
                 const category = response2.data.data.name
                 const productData = { ...data, categoryName: category }
                 setProduct(productData)
@@ -67,7 +67,7 @@ export default function ProductDetails() {
     }
     const aproveProduct = async () => {
         try {
-            const response = await axios.put(`${import.meta.env.BACKEND_BASEURL}/v1/api/products/status/${id}`,
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/api/products/status/${id}`,
                 { isApproved: "approved" },
                 {
                     headers: {
@@ -127,7 +127,7 @@ export default function ProductDetails() {
     }
     const handleRemoveProduct = async () => {
         try {
-            const response = await axios.delete(`${import.meta.env.BACKEND_BASEURL}/v1/api/products/${id}`, {
+            const response = await axios.delete(`${import.meta.env.VITE_API_URL}/v1/api/products/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

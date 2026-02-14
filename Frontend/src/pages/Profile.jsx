@@ -40,7 +40,7 @@ export default function Profile() {
     }
     const handleChangePass = async () => {
         try {
-            const response = await axios.put(`${import.meta.env.BACKEND_BASEURL}/v1/api/users/update-password`,
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/api/users/update-password`,
                 {
                     currentPassword: currentPass,
                     newPassword: newPass

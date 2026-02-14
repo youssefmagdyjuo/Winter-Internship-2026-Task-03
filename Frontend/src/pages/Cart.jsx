@@ -30,7 +30,7 @@ export default function Cart() {
         try {
             setLoading(true)
             const response = await axios.post(
-                `${import.meta.env.BACKEND_BASEURL}/v1/api/orders`,
+                `${import.meta.env.VITE_API_URL}/v1/api/orders`,
                 {items},
                 {
                     headers: {
