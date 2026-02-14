@@ -4,7 +4,7 @@ export const getUserRole = async () => {
     const token = localStorage.getItem('mvec_token')
     try {
         const response = await axios.get(
-            'http://localhost:5000/v1/api/users/userRole',
+            `${import.meta.env.BACKEND_BASEURL}/v1/api/users/userRole`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`

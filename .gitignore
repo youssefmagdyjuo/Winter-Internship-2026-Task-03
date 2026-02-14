@@ -54,16 +54,16 @@ __pycache__/
 *.jar
 .env
 # Environment variables
-frontend/. env
-frontend/.env. local
-frontend/.env.*.local
-frontend/node_modules/
-frontend/package-lock.json
-backend/node_modules/
-backend/package-lock.json
-backend/. env
-backend/.env.local
-backend/.env.*.local
+Frontend/. env
+Frontend/.env. local
+Frontend/.env.*.local
+Frontend/node_modules/
+Frontend/package-lock.json
+Backend/node_modules/
+Backend/package-lock.json
+Backend/. env
+Backend/.env.local
+Backend/.env.*.local
 # Logs
 *.log
 

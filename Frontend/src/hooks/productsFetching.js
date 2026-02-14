@@ -5,7 +5,7 @@ export const fetchAllProducts = async () => {
         const token = localStorage.getItem('mvec_token')
         //fetch products
         const response = await axios.get(
-            'http://localhost:5000/v1/api/products',
+            `${import.meta.env.BACKEND_BASEURL}/v1/api/products`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -17,10 +17,10 @@ export const fetchAllProducts = async () => {
         const productsWithSellerName = await Promise.all(
             products.map(async (product) => {
                 const sellerRes = await axios.get(
-                    `http://localhost:5000/v1/api/users/${product.sellerId}`
+                    `${import.meta.env.BACKEND_BASEURL}/v1/api/users/${product.sellerId}`
                 );
                 const categoryRes = await axios.get(
-                    `http://localhost:5000/v1/api/categories/${product.categoryId}`
+                    `${import.meta.env.BACKEND_BASEURL}/v1/api/categories/${product.categoryId}`
                 );
                 return {
                     ...product,
@@ -40,17 +40,17 @@ export const fetchApprovedProductsData = async () => {
     try {
         //fetch products
         const response = await axios.get(
-            'http://localhost:5000/v1/api/products/approved'
+            `${import.meta.env.BACKEND_BASEURL}/v1/api/products/approved`
         );
         const products = response.data.data;
         //fetch seller name for each product
         const productsWithSellerName = await Promise.all(
             products.map(async (product) => {
                 const sellerRes = await axios.get(
-                    `http://localhost:5000/v1/api/users/${product.sellerId}`
+                    `${import.meta.env.BACKEND_BASEURL}/v1/api/users/${product.sellerId}`
                 );
                 const categoryRes = await axios.get(
-                    `http://localhost:5000/v1/api/categories/${product.categoryId}`
+                    `${import.meta.env.BACKEND_BASEURL}/v1/api/categories/${product.categoryId}`
                 );
                 return {
                     ...product,
@@ -70,7 +70,7 @@ export const fetchCategories = async () => {
     try {
         //fetch categories
         const response = await axios.get(
-            'http://localhost:5000/v1/api/categories'
+            `${import.meta.env.BACKEND_BASEURL}/v1/api/categories`
         );
         const categories = response.data.data;
         return categories;

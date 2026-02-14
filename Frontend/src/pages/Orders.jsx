@@ -24,7 +24,7 @@ export default function Orders() {
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:5000/v1/api/orders",
+                    `${import.meta.env.BACKEND_BASEURL}v1/api/orders`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`

@@ -40,7 +40,7 @@ export default function Profile() {
     }
     const handleChangePass = async () => {
         try {
-            const response = await axios.put(`http://localhost:5000/v1/api/users/update-password`,
+            const response = await axios.put(`${import.meta.env.BACKEND_BASEURL}/v1/api/users/update-password`,
                 {
                     currentPassword: currentPass,
                     newPassword: newPass

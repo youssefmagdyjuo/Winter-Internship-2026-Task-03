@@ -66,7 +66,7 @@ export default function OrderDetails() {
         const fetchOrder = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:5000/v1/api/orders/${id}`,
+                    `${import.meta.env.BACKEND_BASEURL}/v1/api/orders/${id}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -100,7 +100,7 @@ export default function OrderDetails() {
 
         try {
             const response = await axios.put(
-                `http://localhost:5000/v1/api/orders/${id}`,
+                `${import.meta.env.BACKEND_BASEURL}/v1/api/orders/${id}`,
                 { status: selectedStatus },
                 {
                     headers: {

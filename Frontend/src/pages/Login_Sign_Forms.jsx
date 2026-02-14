@@ -22,7 +22,7 @@ export default function Login_Sign_Forms() {
         // Handle login form submission
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/v1/api/auth/login', loginData);
+            const response = await axios.post(`${import.meta.env.BACKEND_BASEURL}/v1/api/auth/login`, loginData);
             console.log('Login successful:', response.data);
             setLoginData({
                 email: '',
@@ -41,7 +41,7 @@ export default function Login_Sign_Forms() {
         // Handle signup form submission
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/v1/api/auth/signup', signupData);
+            const response = await axios.post(`${import.meta.env.BACKEND_BASEURL}/v1/api/auth/signup`, signupData);
             console.log('Signup successful:', response.data);
             setSignupData({
                 name: '',

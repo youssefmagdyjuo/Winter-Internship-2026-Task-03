@@ -16,7 +16,7 @@ export default function Statistics() {
     useEffect(() => {
         const fetchStatistics = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/v1/api/statistics', {
+                const res = await axios.get(`${import.meta.env.BACKEND_BASEURL}/v1/api/statistics`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

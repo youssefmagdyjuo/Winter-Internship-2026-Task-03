@@ -82,7 +82,7 @@ export default function AddProduct({ isEditing = false, productId ,setEditingMod
                     const token = localStorage.getItem('mvec_token');
 
                     const res = await axios.get(
-                        `http://localhost:5000/v1/api/products/${productId}`,
+                        `${import.meta.env.BACKEND_BASEURL}/v1/api/products/${productId}`,
                         {
                             headers: { Authorization: `Bearer ${token}` }
                         }
@@ -178,7 +178,7 @@ export default function AddProduct({ isEditing = false, productId ,setEditingMod
             const token = localStorage.getItem('mvec_token');
             //add product
             const response = await axios.post(
-                'http://localhost:5000/v1/api/products',
+                `${import.meta.env.BACKEND_BASEURL}/v1/api/products`,
                 formData,
                 {
                     headers: {
@@ -233,7 +233,7 @@ export default function AddProduct({ isEditing = false, productId ,setEditingMod
             const token = localStorage.getItem('mvec_token');
 
             const response = await axios.put(
-                `http://localhost:5000/v1/api/products/${productId}`,
+                `${import.meta.env.BACKEND_BASEURL}/v1/api/products/${productId}`,
                 formData,
                 {
                     headers: {

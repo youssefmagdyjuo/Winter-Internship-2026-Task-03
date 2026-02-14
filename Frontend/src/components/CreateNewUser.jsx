@@ -15,7 +15,7 @@ export default function CreateNewUser({token}) {
         // Handle signup form submission
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/v1/api/users', signupData,{
+            const response = await axios.post(`${import.meta.env.BACKEND_BASEURL}/v1/api/users`, signupData,{
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
