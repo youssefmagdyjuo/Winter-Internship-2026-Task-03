@@ -24,7 +24,7 @@ export default function Orders() {
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(
-                    `${import.meta.env.VITE_API_URL}v1/api/orders`,
+                    `${import.meta.env.VITE_API_URL}/v1/api/orders`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`
@@ -33,7 +33,7 @@ export default function Orders() {
                 )
                 dispatch(getallOrders(response.data.data))
                 console.log(response.data.data);
-                
+
             } catch (error) {
                 console.log(error)
             } finally {
@@ -125,11 +125,11 @@ export default function Orders() {
                                             <span className={` rounded text-white 
                                             ${order.status === "completed"
                                                     ? "bg-[var(--green)]"
-                                                    :order.status === "cancelled"
-                                                    ? "bg-[var(--gray)]"
-                                                    :order.status === "pending"
-                                                    ?"bg-[var(--yellow)]"
-                                                    :"bg-[var(--color-primary)]"
+                                                    : order.status === "cancelled"
+                                                        ? "bg-[var(--gray)]"
+                                                        : order.status === "pending"
+                                                            ? "bg-[var(--yellow)]"
+                                                            : "bg-[var(--color-primary)]"
                                                 }`}>
                                                 {order.status}
                                             </span>
@@ -158,16 +158,16 @@ export default function Orders() {
 
                                     </tr>
                                 ))}
-                        </tbody>
+                            </tbody>
 
                         </table>
-            ) : (
-            <p className="no-results center">
-                No orders found
-            </p>
-            )
+                    ) : (
+                        <p className="no-results center">
+                            No orders found
+                        </p>
+                    )
                 }
-        </div>
+            </div>
 
 
         </div >
