@@ -17,10 +17,12 @@ import NotAuthorized from './pages/NotAuthorized';
 import AuthRoute from './components/AuthRoute';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
+import ScrollToTop from './components/ScrollToTop';
 function App() {
 
   return (
     <Router>
+      <ScrollToTop/>
       <Routes>
         <Route element={<Layout />}>
 

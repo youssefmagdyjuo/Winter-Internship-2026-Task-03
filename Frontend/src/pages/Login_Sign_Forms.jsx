@@ -62,7 +62,7 @@ export default function Login_Sign_Forms() {
         <FormLayout>
             <SwitchTogil onClick={() => { setFormType(formType == 'signup' ? 'login' : 'signup') }}>
                 <p className={formType == 'signup' ? 'text-white' : ''}>Sign up</p>
-                <p className={formType == 'login' ? 'text-white' : ''}>Log in</p>
+                <p className={formType == 'login' ? 'text-white' : ''}>Login</p>
                 <span className={formType == 'signup' ? 'left-0' : 'left-[calc(100%-10rem)]'}></span>
             </SwitchTogil>
             {
@@ -104,7 +104,7 @@ export default function Login_Sign_Forms() {
                             <Input onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} value={loginData.email} placeholder="Email" type='email' required={true}/>
                             <Input onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} value={loginData.password} placeholder="Password" type="password" required={true}/>
                             {/* <div style={{ width: '10rem' }} > */}
-                            <Button onClick={handleLoginSubmit} style={'btn-primary'}>Log In</Button>
+                            <Button onClick={handleLoginSubmit} style={'btn-primary'}>Login</Button>
                             {/* </div> */}
                         </>
                     )

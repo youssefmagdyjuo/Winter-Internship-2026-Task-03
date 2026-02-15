@@ -26,7 +26,8 @@
     --green: #18db56d5;
     --pink: #db18c1d5;
     --yellow: rgb(220, 208, 46);
-    --color-mix: linear-gradient(90deg, #18B4DB 0%, #18B4DB 50%, #18B4DB 100%);
+    /* --color-mix: linear-gradient(90deg, #18B4DB 0%, #18B4DB 50%, #18B4DB 100%); */
+    --color-mix: linear-gradient(1800deg, #18B4DB 0%, #1dccf8 50%, #18B4DB 100%);
 }
 
 
@@ -79,6 +80,7 @@ h2 {
     border: none;
     width: 100%;
     font-size: 1.1rem;
+    box-shadow: 0 0.5rem 20px rgba(0, 0, 0, 0.084);
 
 }
 
@@ -89,7 +91,7 @@ h2 {
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0.5rem 20px rgba(0, 0, 0, 0.153);
+    box-shadow: 0 0.5rem 20px rgba(0, 0, 0, 0.215);
 }
 
 .btn-primary {
