@@ -3,6 +3,7 @@ import { getUserRole } from '../../hooks/user'
 import Orders from '../Orders'
 import Statistics from './Statistics'
 import ProductsManagement from '../ProductsManagement'
+import CategoriesManagement from '../../components/CategoriesManagement'
 
 export default function Dashboard() {
     const [userRole, setUserRole] = useState('')
@@ -13,7 +14,7 @@ export default function Dashboard() {
         }
         fetchRole()
     }, [])
-    const [view, setView] = useState('statistics')
+    const [view, setView] = useState('categories')
     return (
         <div>
             <div className='dashboardBox_container'>
@@ -35,16 +36,24 @@ export default function Dashboard() {
                     <i class="fa-solid fa-clipboard-list"></i>
                     <strong>Products</strong>
                 </div>
+                <div
+                    onClick={() => { setView('categories') }}
+                    className={`dashboardBox sm:w-full lg:w-100 center gap-4 ${view == 'categories' ? 'dashboardBoxActive' : ''}`}>
+                    <i class="fa-solid fa-layer-group"></i>
+                    <strong>Categories</strong>
+                </div>
             </div>
             <div>
                 {
                     view == 'orders'
                         ? (<><Orders /></>)
                         : view == 'products'
-                            ? (<ProductsManagement statusType={'pending'}/>)
+                            ? (<ProductsManagement statusType={'pending'} />)
                             : view == 'statistics'
                                 ? (<Statistics />)
-                                : (<></>)
+                                : view == 'categories'
+                                ?(<CategoriesManagement/>)
+                                :(<></>)
                 }
             </div>
         </div>
