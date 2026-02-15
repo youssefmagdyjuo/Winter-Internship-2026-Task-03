@@ -399,7 +399,7 @@ h2 {
     height: calc(100vh - 5rem);
     width: 100%;
     /* text-shadow: 0 5px 5px rgba(31, 31, 31, 0.349); */
-    text-shadow: 0 1px 10px rgba(0, 255, 255, 0.573);
+    text-shadow: 0 1px 10px rgba(0, 255, 255, 0.384);
     background-color: var(--color-secondary);
 
 }
@@ -1173,7 +1173,7 @@ table th {
 @media (max-width: 680px) {
 
     .heroContent h1 {
-        font-size: 3.5rem;
+        font-size: 3rem;
     }
 
     .heroContent p {

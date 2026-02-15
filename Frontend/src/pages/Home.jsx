@@ -36,7 +36,7 @@ export default function Home() {
                     Shop by Category
                 </h2>
 
-                <div className="Products_container">
+                <div className="Products_container center">
                     {["Electronics", "Fashion", "Home", "Sports"].map((cat, index) => (
                         <div key={index} className="center card">
                             <h3 className="title">{cat}</h3>
@@ -47,7 +47,7 @@ export default function Home() {
 
 
             {/* Why Choose Us */}
-            <section style={{ padding: "3rem 2rem", background: "#f9fafb" }}>
+            <section style={{ background: "#f9fafb" }}>
                 <h2 style={{ textAlign: "center", marginBottom: "2rem" }}>
                     Why Choose Viteruca?
                 </h2>
