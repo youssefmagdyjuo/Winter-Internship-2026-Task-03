@@ -37,7 +37,7 @@ export default function Home() {
                 </h2>
 
                 <div className="Products_container center">
-                    {["Electronics", "Fashion", "Home", "Sports"].map((cat, index) => (
+                    {["Electronics", "Fashion", "Sports", "Furniture"].map((cat, index) => (
                         <div key={index} className="center card">
                             <h3 className="title">{cat}</h3>
                         </div>
