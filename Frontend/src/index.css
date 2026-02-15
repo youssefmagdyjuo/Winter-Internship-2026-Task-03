@@ -26,8 +26,8 @@
     --green: #18db56d5;
     --pink: #db18c1d5;
     --yellow: rgb(220, 208, 46);
-    /* --color-mix: linear-gradient(90deg, #18B4DB 0%, #18B4DB 50%, #18B4DB 100%); */
-    --color-mix: linear-gradient(1800deg, #18B4DB 0%, #1dccf8 50%, #18B4DB 100%);
+    --color-mix: linear-gradient(180deg, #18B4DB 0%, #1dccf8 50%, #18B4DB 100%);
+    --color-mix2: linear-gradient(180deg, #2b4351 0%, #3d5d70 50%, #2b4351 100%);
 }
 
 
@@ -122,7 +122,7 @@ h2 {
 }
 
 .btn-secondary {
-    background-color: var(--color-secondary);
+    background: var(--color-mix2);
     color: white;
 }
 
