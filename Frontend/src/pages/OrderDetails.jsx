@@ -4,10 +4,12 @@ import { useParams } from "react-router-dom";
 import Loader from "../components/Loader";
 import PopUpLayout from "../components/PopUpLayout";
 import Button from "../components/Button";
+import Input from "../components/Input";
 import Toast from "../components/Toast";
 import { useNavigate } from "react-router-dom";
 import { getUserRole } from "../hooks/user";
 import Selector from '../components/Selector';
+import PaidToggle from "../components/PaidToggle";
 
 export default function OrderDetails() {
     // role base 
@@ -30,6 +32,7 @@ export default function OrderDetails() {
         text: '',
         type: ''
     })
+    const [isPaid, setIsPaid] = useState(false);
     const statusOptions = [
         'pending',
         'confirmed',
@@ -63,7 +66,7 @@ export default function OrderDetails() {
 
 
     useEffect(() => {
-        const fetchOrder = async () => {
+        const fetchOrder = async () => {            
             try {
                 const response = await axios.get(
                     `${import.meta.env.VITE_API_URL}/v1/api/orders/${id}`,
@@ -74,34 +77,72 @@ export default function OrderDetails() {
                     }
                 );
                 setOrder(response.data.data);
-                console.log(response.data.data);
                 setLoading(false);
+                setIsPaid(response.data.data.isPaid)
             } catch (error) {
                 console.log(error);
             }
         };
-
         fetchOrder();
     }, [id]);
 
     if (loading) return <Loader />;
 
     if (!order) return <p>Order not found</p>;
+
+    // const handleOrderStatusChanged = async () => {
+    //     const selectedStatus = orderFormFields.find(
+    //         f => f.name === 'orderStatus'
+    //     )?.value;
+    //     try {
+    //         const response = await axios.put(
+    //             `${import.meta.env.VITE_API_URL}/v1/api/orders/${id}`,
+    //             { status: selectedStatus },
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             }
+    //         );
+    //         setMessage({ text: response.data.message, type: 'success' });
+    //         setOpenToast(true);
+
+    //         // ✅ Update UI immediately
+    //         setOrder(prev => ({
+    //             ...prev,
+    //             status: selectedStatus,
+    //             isPaid:isPaid
+    //         }));
+    //     } catch (error) {
+    //         setMessage({
+    //             text: error.response?.data?.message || "Something went wrong",
+    //             type: 'error'
+    //         });
+    //         setOpenToast(true);
+    //         setIsOpen(false);
+    //     } finally {
+    //         setTimeout(() => setOpenToast(false), 3000);
+    //         setIsOpen(false);
+    //     }
+    // };
     const handleOrderStatusChanged = async () => {
         const selectedStatus = orderFormFields.find(
             f => f.name === 'orderStatus'
-        )?.value;
-
-        if (!selectedStatus) {
-            setMessage({ text: "Please select a status first", type: "error" });
+        )?.value;        
+        if (!selectedStatus && isPaid === order.isPaid) {
+            setMessage({ text: "No changes detected", type: "error" });
             setOpenToast(true);
             return;
         }
 
+
         try {
             const response = await axios.put(
                 `${import.meta.env.VITE_API_URL}/v1/api/orders/${id}`,
-                { status: selectedStatus },
+                {
+                    status: selectedStatus,
+                    isPaid: isPaid   // 👈 admin only (backend handles permission)
+                },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -111,7 +152,9 @@ export default function OrderDetails() {
 
             setMessage({ text: response.data.message, type: 'success' });
             setOpenToast(true);
-            setTimeout(() => navigate('/orders'), 3000);
+
+            // ✅ خليه ياخد الداتا من السيرفر مش من الstate
+            setOrder(response.data.data);
 
         } catch (error) {
             setMessage({
@@ -205,7 +248,14 @@ export default function OrderDetails() {
                             <Button
                                 style="btn-danger"
                                 disabled={order.status !== 'pending' && order.status !== 'confirmed'}
-                                onClick={() => { setOrderStatus('cancelled'), setIsOpen(true) }}
+                                onClick={() => {
+                                    handleInputChange(
+                                        { target: { value: 'cancelled' } },
+                                        'orderStatus'
+                                    );
+                                    setIsOpen(true);
+                                }}
+
                             >
                                 {order.status == 'completed' ? "Order Completed" : "Cancel Order"}
                             </Button>
@@ -214,6 +264,10 @@ export default function OrderDetails() {
                     : userRole && userRole == 'admin'
                         ? (<>
                             <div className="w-100 mt-4 flex gap-4">
+                                <PaidToggle
+                                    value={isPaid}
+                                    onChange={setIsPaid}
+                                />
                                 <Selector
                                     options={statusOptions}
                                     placeholder="Status..."

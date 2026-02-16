@@ -220,7 +220,7 @@ export default function ProductDetails() {
                                     </>)
                                     : userRole && userRole == 'admin'
                                         ? (<>
-                                            <div className="flex gap-2 justify-center w-100">
+                                            <div className="flex gap-2 justify-center w-80">
                                                 <Button
                                                     disabled={product.isApproved == 'approved'}
                                                     style="btn-primary"
@@ -238,7 +238,7 @@ export default function ProductDetails() {
                                         </>)
                                         : userRole && userRole == 'seller'
                                             ? (<>
-                                                <div className="flex gap-2 justify-center w-100">
+                                                <div className="flex gap-2 justify-center w-80">
                                                     <Button
                                                         style="btn-primary"
                                                         onClick={() => { setEditingMode(true) }}

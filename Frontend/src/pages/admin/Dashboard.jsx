@@ -14,7 +14,7 @@ export default function Dashboard() {
         }
         fetchRole()
     }, [])
-    const [view, setView] = useState('categories')
+    const [view, setView] = useState('statistics')
     return (
         <div>
             <div className='dashboardBox_container'>
