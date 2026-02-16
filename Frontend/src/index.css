@@ -939,7 +939,7 @@ table th {
 .profileBoxControl>.controlersBox p,
 .info p {
     text-decoration: underline;
-    color: var(--color-mix);
+    color: var(--color-primary);
     cursor: pointer;
     transition: all 0.3s ease-in-out;
     font-size: 1rem;
