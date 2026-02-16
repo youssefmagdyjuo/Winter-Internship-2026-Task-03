@@ -96,7 +96,7 @@ export default function ProductDetails() {
         try {
             //update product to rejected
             //send message to seller
-            const response = await axios.put(`http://localhost:5000/v1/api/products/status/${id}`,
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/v1/api/products/status/${id}`,
                 { isApproved: "rejected", rejectReason: rejectReason },
                 {
                     headers: {
@@ -229,6 +229,7 @@ export default function ProductDetails() {
                                                     Approve
                                                 </Button>
                                                 <Button
+                                                    disabled={product.isApproved == 'rejected'}
                                                     onClick={() => setIsOpen(true)}
                                                     style="btn-danger"
                                                 >
@@ -314,7 +315,7 @@ export default function ProductDetails() {
                         onClick={() => { setEditingMode(false) }}
                         class="cursor-pointer text-3xl text-right w-full fa-regular fa-circle-xmark">
                     </i>
-                    <AddProduct isEditing={true} productId={id} setEditingMode={setEditingMode}/>
+                    <AddProduct isEditing={true} productId={id} setEditingMode={setEditingMode} />
                 </div>
             </PopUpLayout>
         </div>

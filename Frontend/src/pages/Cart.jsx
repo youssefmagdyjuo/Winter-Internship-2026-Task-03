@@ -68,7 +68,7 @@ export default function Cart() {
                             <Link to={`/products/${item.productId}`} >
                                 <ProductCard>
                                     <div className='productImg'>
-                                        <img src={`http://localhost:5000/${item.productImage}`} />
+                                        <img src={`${import.meta.env.VITE_API_URL}/${item.productImage}`} />
                                     </div>
 
                                     <div className="productContent">
