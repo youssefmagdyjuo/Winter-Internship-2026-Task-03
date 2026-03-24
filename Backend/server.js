@@ -3,56 +3,74 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose');
-const port = process.env.PORT || 5000;
-const uri = process.env.ATLAS_URI;
-const userRoutes = require('./routes/usersRoutes');
-const authUserRoutes = require('./routes/authRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-const productRoutes = require('./routes/productsRoutes');
-const orderRoutes = require('./routes/orderRoutes');
-const statisticsRoutes = require('./routes/statisticsRoutes');
 const path = require('path');
 
+// ENV
+const port = process.env.PORT || 5000;
+const uri = process.env.ATLAS_URI;
+
+// Routes
+const userRoutes = require('./routes/usersRoutes');
+const authUserRoutes = require('./routes/authRoutes');
+const servicesRoutes = require('./routes/servicesRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+
+// ======================
 // Middleware
+// ======================
+
+// Enable CORS (optional but recommended)
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
+    origin: process.env.FRONTEND_URL || '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
-app.use(express.json())
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
-// Use user routes
-app.use('/v1/api/users', userRoutes);
-// Use auth user routes
-app.use('/v1/api/auth', authUserRoutes);
-// Use category routes
-app.use('/v1/api/categories', categoryRoutes);
-// Use product routes
-app.use('/v1/api/products', productRoutes);
-// Use order routes
-app.use('/v1/api/orders', orderRoutes);
-// Use statistics routes for admin only
-app.use('/v1/api/statistics', statisticsRoutes);
+// Static files (uploads)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Define a simple route
+
+// ======================
+// Routes
+// ======================
+
+// Users
+app.use('/v1/api/users', userRoutes);
+
+// Auth
+app.use('/v1/api/auth', authUserRoutes);
+
+// Services 
+app.use('/v1/api/services', servicesRoutes);
+
+// ✅ Bookings (instead of orders)
+app.use('/v1/api/bookings', bookingRoutes);
+
+
+
+// ======================
+// Health Check Route
+// ======================
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.send('API is running 🚀');
 });
 
-// Connect Database
+
+// ======================
+// Database Connection
+// ======================
 mongoose.connect(uri)
     .then(() => {
         console.log('Database Connected');
-        // Running Server
+
         app.listen(port, () => {
-            console.log(`Server is listening on port ${port}`);
-        })
+            console.log(`Server is running on port ${port}`);
+        });
     })
     .catch((err) => {
-        console.log(err.message);
-    })
+        console.log('DB Connection Error:', err.message);
+    });

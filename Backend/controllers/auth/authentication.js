@@ -10,7 +10,7 @@ const signup = async (req, res) => {
         if (exists) {
             return res.status(400).json({ message: "Email already exists" });
         }
-        if(role!=='seller' && role!=='customer'){
+        if(role!=='provider' && role!=='customer'){
             role='customer'
         }
         const hashedPassword = await bcrypt.hash(password, 10);
