@@ -11,7 +11,7 @@ const sendEmail = async (to, subject, text) => {
         });
 
         const mailOptions = {
-            from: `"Viteruca | E-commerce" <${process.env.EMAIL_USER}>`,
+            from: `"Serviaura | Booking Services" <${process.env.EMAIL_USER}>`,
             to,
             subject,
             text,
