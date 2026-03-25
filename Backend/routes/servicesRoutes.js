@@ -22,7 +22,6 @@ router.route('/')
         addService
     )
     .get(
-        protect,
         getAllServices
     );
 

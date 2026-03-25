@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Input from '../components/Input'
 import ProductCard from '../components/ProductCard'
-import { getApprovedProducts } from '../features/products/approvedProducts'
+import { getServices } from '../features/services folder/services'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchApprovedProductsData } from '../hooks/productsFetching'
+import { fetchAllServices } from '../hooks/fetching'
 import { Link } from 'react-router-dom'
 import Loader from '../components/Loader'
-export default function Products() {
+export default function Services() {
     //variables
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(true);
     const isOpen = useSelector((state) => state.navBar.isOpen);
-    const approvedProducts = useSelector((state) => state.approvedProducts);
+    const services = useSelector((state) => state.services);
     const [searchData, setSearchData] = useState({
         productName: '',
         categoryName: '',
@@ -20,9 +20,10 @@ export default function Products() {
     //fetching data
     useEffect(() => {
         const renderFun = async () => {
-            const data = await fetchApprovedProductsData()
+            const data = await fetchAllServices()
+            console.log(data)
             if (data) {
-                dispatch(getApprovedProducts(data));
+                dispatch(getServices(data));
 
             }
 
@@ -33,25 +34,20 @@ export default function Products() {
     }, [])
 
     //search logic by useMemo
-    const filteredProducts = useMemo(() => {
-        return approvedProducts.filter(product => {
+    const filteredServices = useMemo(() => {
+        return services.filter(product => {
             const productNameMatch =
                 product.title.toLowerCase()
                     .includes(searchData.productName.toLowerCase());
-
-            const categoryMatch =
-                searchData.categoryName === '' ||
-                product.categoryName?.toLowerCase()
-                    .includes(searchData.categoryName.toLowerCase());
 
             const vendorMatch =
                 searchData.vendorName === '' ||
                 product.sellerName?.toLowerCase()
                     .includes(searchData.vendorName.toLowerCase());
 
-            return productNameMatch && categoryMatch && vendorMatch;
+            return productNameMatch && vendorMatch;
         });
-    }, [approvedProducts, searchData]);
+    }, [services, searchData]);
 
     return (
         <div>
@@ -94,8 +90,8 @@ export default function Products() {
                 {
                     loading ? (
                         <Loader />
-                    ) : filteredProducts.length > 0 ? (
-                        filteredProducts.map((product, index) => (
+                    ) : filteredServices.length > 0 ? (
+                        filteredServices.map((product, index) => (
                             <Link to={`/products/${product._id}`} key={index}>
                                 <ProductCard>
                                     <div className='productImg'>
@@ -109,7 +105,7 @@ export default function Products() {
                                     </div>
 
                                     <p className="productProvider">
-                                        provided by : {product.sellerName}
+                                        provided by : {product.providerName}
                                     </p>
                                 </ProductCard>
                             </Link>

@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Input from '../components/Input'
 import { useSelector } from 'react-redux'
-import { fetchAllProducts } from '../hooks/productsFetching'
+// import { fetchAllProducts } from '../hooks/fetching'
 import { Link } from 'react-router-dom'
 import Loader from '../components/Loader'
 import { getUserRole } from '../hooks/user'
@@ -27,16 +27,16 @@ export default function ProductsManagement({ statusType }) {
         fetchRole()
     }, [])
     // Fetch Products
-    useEffect(() => {
-        const renderFun = async () => {
-            const data = await fetchAllProducts()
-            if (data) {
-                setAllProducts(data)
-            }
-            setLoading(false)
-        }
-        renderFun()
-    }, [])
+    // useEffect(() => {
+    //     const renderFun = async () => {
+    //         const data = await fetchAllProducts()
+    //         if (data) {
+    //             setAllProducts(data)
+    //         }
+    //         setLoading(false)
+    //     }
+    //     renderFun()
+    // }, [])
 
     // Filter Logic
     const filteredProducts = useMemo(() => {

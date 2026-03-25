@@ -11,8 +11,7 @@ import {
 import storage from "redux-persist/lib/storage";
 
 import navBarReducer from "../features/puplic/navBar.js";
-import approvedProductsReducer from "../features/products/approvedProducts.js";
-import categoriesReducer from "../features/products/categories.js";
+import servicesReducer from "../features/services folder/services.js";
 import cartReducer from "../features/cart/cart.js";
 import allOrdersReducer from "../features/orders/allOrders.js";
 
@@ -26,8 +25,7 @@ const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
 export const store = configureStore({
     reducer: {
         navBar: navBarReducer,
-        approvedProducts: approvedProductsReducer,
-        categories: categoriesReducer,
+        services: servicesReducer,
         cart: persistedCartReducer,
         allOrders: allOrdersReducer,
     },

@@ -5,11 +5,6 @@ const getAllServices = async (req, res) => {
     try {
         let filter = {};
 
-        // If provider → show only their services
-        if (req.user?.role === 'provider') {
-            filter.providerId = req.user._id;
-        }
-
         // Apply query filters if any
         if (req.query) {
             filter = { ...filter, ...req.query };

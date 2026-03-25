@@ -6,7 +6,7 @@ export default function Footer() {
         <footer className="site-footer">
             <div className="container footer-inner">
                 <div className="footer-brand">
-                    <Link className="logo" to="/">Serviaura</Link>
+                    <Link className="logo" to="/">Kliordx</Link>
                     <p className="tagline">
                         Connect with trusted professionals and book services easily.
                     </p>
@@ -40,7 +40,7 @@ export default function Footer() {
 
             <div className="footer-bottom">
                 <div className="container footer-bottom-inner">
-                    <small>© {new Date().getFullYear()} Serviaura. All rights reserved.</small>
+                    <small>© {new Date().getFullYear()} Kliordx. All rights reserved.</small>
                 </div>
             </div>
         </footer>

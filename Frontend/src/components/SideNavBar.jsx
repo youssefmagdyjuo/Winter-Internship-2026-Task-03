@@ -25,7 +25,7 @@ export default function SideNavBar() {
     const location = useLocation();
     let links = [
         { name: 'Home', path: '/', icon: 'fa-home' },
-        { name: 'Products', path: '/products', icon: 'fa-bag-shopping' },
+        { name: 'Services', path: '/services', icon: 'fa-bag-shopping' },
         { name: 'About', path: '/about', icon: 'fa-info-circle' },
         { name: 'Contact', path: '/contact', icon: 'fa-phone' },
     ];

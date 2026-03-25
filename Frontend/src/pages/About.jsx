@@ -15,7 +15,7 @@ export default function About() {
             {/* HERO */}
             <section className="about-hero">
                 <div className="container hero-inner">
-                    <h1 className="hero-title">About Serviaura</h1>
+                    <h1 className="hero-title">About Kliordx</h1>
                     <p className="hero-sub">
                         We connect customers with trusted service providers,
                         making it easy to discover, compare, and book services in one place.
@@ -92,7 +92,7 @@ export default function About() {
             <section className="about-cta container">
                 <h2>Are you a service provider?</h2>
                 <p>
-                    Join Serviaura and start offering your services to thousands of customers.
+                    Join Kliordx and start offering your services to thousands of customers.
                 </p>
 
                 <Link className="btn btn-primary" to="/register">

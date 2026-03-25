@@ -4,13 +4,10 @@ import Input from '../components/Input'
 import Button from '../components/Button'
 import axios from 'axios';
 import Selector from '../components/Selector';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCategories } from '../features/products/categories'
-import { fetchCategories } from '../hooks/productsFetching';
+import { useSelector } from 'react-redux';
 import Toast from '../components/Toast';
-export default function AddProduct({ isEditing = false, productId ,setEditingMode}) {
+export default function AddProduct({ isEditing = false, productId, setEditingMode }) {
     //variables & states
-    const dispatch = useDispatch()
     const [openToast, setOpenToast] = useState(false)
     const categories = useSelector((state) => state.categories) || [];
     const heroImageRef = useRef();
@@ -67,14 +64,7 @@ export default function AddProduct({ isEditing = false, productId ,setEditingMod
         text: '',
         type: ''
     })
-    //fetching categories
-    useEffect(() => {
-        const renderFun = async () => {
-            const data = await fetchCategories()
-            dispatch(getCategories(data))
-        }
-        renderFun()
-    }, [])
+
     useEffect(() => {
         if (isEditing && productId) {
             const fetchProduct = async () => {
@@ -246,7 +236,7 @@ export default function AddProduct({ isEditing = false, productId ,setEditingMod
                 type: 'success'
             })
             setOpenToast(true);
-            
+
         } catch (err) {
             console.error(err);
             setMessage({
@@ -255,7 +245,7 @@ export default function AddProduct({ isEditing = false, productId ,setEditingMod
             })
             setOpenToast(true);
         } finally {
-            setTimeout(() => { setOpenToast(false) ,setEditingMode(false)}, 3000);
+            setTimeout(() => { setOpenToast(false), setEditingMode(false) }, 3000);
         }
     };
 

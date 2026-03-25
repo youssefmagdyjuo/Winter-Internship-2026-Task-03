@@ -16,8 +16,8 @@
 }
 
 :root {
-    --color-primary: #90db18;
-    --color-secondary: #332545;
+    --color-primary: #2bc5d9;
+    --color-secondary: #141c26;
     --color-danger: #ef4444;
     --black: #313131;
     --gray: #A6A6A6;
@@ -26,8 +26,8 @@
     --green: #18db56d5;
     --pink: #db18c1d5;
     --yellow: rgb(220, 208, 46);
-    --color-mix: linear-gradient(180deg, #90db18 0%, #acf040 50%, #90db18 100%);
-    --color-mix2: linear-gradient(180deg, #332545 0%, #4d3b64 50%, #332545 100%);
+    --color-mix: linear-gradient(180deg, #2bc5d9 0%, #47d3e5 50%, #2bc5d9 100%);
+    --color-mix2: linear-gradient(180deg, #141c26 0%, #1f2936 50%, #141c26 100%);
 }
 
 
@@ -57,7 +57,9 @@ div img {
     object-fit: fill;
     height: 100%;
 }
-
+.logo{
+    width: 12rem !important;
+}
 h1 {
     font-size: 3rem;
 }

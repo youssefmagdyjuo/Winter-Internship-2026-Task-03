@@ -12,20 +12,22 @@ export default function UpperNavBar() {
     return (
         <div className='upper_navbar_container'>
             <nav className='upper_navbar'>
-                <Link to="/"><img src="/logo.svg" alt="Logo" className="w-25" /></Link>
-                            <div className="w-25 hidden lg:block">
-                                {
-                                    user
-                                        ? (<>
-                                            <LogoutButton />
-                                        </>)
-                                        : (<>
-                                            <Link to="/login-signup">
-                                                <Button style={'btn-primary'}>Login</Button>
-                                            </Link>
-                                        </>)
-                                }
-                            </div>
+                <Link to="/">
+                    <img src="/kliordx_logo.png" alt="Logo" className="logo" />
+                </Link>
+                <div className="w-25 hidden lg:block">
+                    {
+                        user
+                            ? (<>
+                                <LogoutButton />
+                            </>)
+                            : (<>
+                                <Link to="/login-signup">
+                                    <Button style={'btn-primary'}>Login</Button>
+                                </Link>
+                            </>)
+                    }
+                </div>
                 <div className="nav_btn" onClick={() => dispatch(toggleNavBar())}>
                     <i className="fa-solid fa-bars"></i>
                 </div>

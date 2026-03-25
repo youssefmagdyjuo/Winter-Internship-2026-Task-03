@@ -4,11 +4,9 @@ import Home from './pages/Home';
 import Login_Sign_Forms from './pages/Login_Sign_Forms';
 import Layout from './pages/Layout';
 import About from './pages/About';
-import Products from './pages/Products';
 import Contact from './pages/Contact';
 import ProtectedRoute from './components/ProtectedRoute';
 import AddProduct from './pages/AddProduct';
-import ProductDetails from './pages/ProductDetails';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import OrderDetails from './pages/OrderDetails';
@@ -18,6 +16,8 @@ import AuthRoute from './components/AuthRoute';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound';
 import ScrollToTop from './components/ScrollToTop';
+import Services from './pages/Services';
+import ServiceDetails from './pages/ServiceDetails';
 function App() {
 
   return (
@@ -29,8 +29,8 @@ function App() {
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/login-signup" element={<Login_Sign_Forms />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/services/:id" element={<ServiceDetails />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/notAuthorized" element={<NotAuthorized />} />

@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
 import { getUserRole } from '../hooks/user'
 import AddProduct from './AddProduct'
-export default function ProductDetails() {
+export default function ServiceDetails() {
     const [rejectReason, setRejectReason] = useState("");
     const token = localStorage.getItem('mvec_token')
     // role base 
