@@ -13,15 +13,14 @@ export default function Services() {
     const isOpen = useSelector((state) => state.navBar.isOpen);
     const services = useSelector((state) => state.services);
     const [searchData, setSearchData] = useState({
-        productName: '',
-        categoryName: '',
-        vendorName: ''
+        serviceName: '',
+        providerName: ''
     })
     //fetching data
     useEffect(() => {
         const renderFun = async () => {
             const data = await fetchAllServices()
-            console.log(data)
+            // console.log(data)
             if (data) {
                 dispatch(getServices(data));
 
@@ -35,17 +34,17 @@ export default function Services() {
 
     //search logic by useMemo
     const filteredServices = useMemo(() => {
-        return services.filter(product => {
-            const productNameMatch =
-                product.title.toLowerCase()
-                    .includes(searchData.productName.toLowerCase());
+        return services.filter(service => {
+            const serviceNameMatch =
+                service.title.toLowerCase()
+                    .includes(searchData.serviceName.toLowerCase());
 
-            const vendorMatch =
-                searchData.vendorName === '' ||
-                product.sellerName?.toLowerCase()
-                    .includes(searchData.vendorName.toLowerCase());
+            const providerMatch =
+                searchData.providerName === '' ||
+                service.providerName?.toLowerCase()
+                    .includes(searchData.providerName.toLowerCase());
 
-            return productNameMatch && vendorMatch;
+            return serviceNameMatch && providerMatch;
         });
     }, [services, searchData]);
 
@@ -55,32 +54,22 @@ export default function Services() {
                 <div className="search_section">
                     <span className=' w-full center font-bold'>Search by: </span>
                     <Input
-                        placeholder={"Product Name"}
-                        value={searchData.productName}
+                        placeholder={"Service Name"}
+                        value={searchData.serviceName}
                         onChange={(e) => {
                             setSearchData(prev => ({
                                 ...prev,
-                                productName: e.target.value
+                                serviceName: e.target.value
                             }))
                         }}
                     />
                     <Input
-                        placeholder={"Ctegory Name"}
-                        value={searchData.categoryName}
+                        placeholder={"Provider Name"}
+                        value={searchData.providerName}
                         onChange={(e) => {
                             setSearchData(prev => ({
                                 ...prev,
-                                categoryName: e.target.value
-                            }))
-                        }}
-                    />
-                    <Input
-                        placeholder={"Vendor Name"}
-                        value={searchData.vendorName}
-                        onChange={(e) => {
-                            setSearchData(prev => ({
-                                ...prev,
-                                vendorName: e.target.value
+                                providerName: e.target.value
                             }))
                         }}
                     />
@@ -92,12 +81,8 @@ export default function Services() {
                         <Loader />
                     ) : filteredServices.length > 0 ? (
                         filteredServices.map((product, index) => (
-                            <Link to={`/products/${product._id}`} key={index}>
+                            <Link to={`/services/${product._id}`} key={index}>
                                 <ProductCard>
-                                    <div className='productImg'>
-                                        <img src={`${import.meta.env.VITE_API_URL}/${product.heroImage}`} />
-                                    </div>
-
                                     <div className="productContent">
                                         <h3 className="productTitle">{product.title}</h3>
                                         <p className="productDesc">{product.description}</p>

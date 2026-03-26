@@ -6,7 +6,6 @@ import Layout from './pages/Layout';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import ProtectedRoute from './components/ProtectedRoute';
-import AddProduct from './pages/AddProduct';
 import Cart from './pages/Cart';
 import Orders from './pages/Orders';
 import OrderDetails from './pages/OrderDetails';
@@ -18,11 +17,12 @@ import NotFound from './pages/NotFound';
 import ScrollToTop from './components/ScrollToTop';
 import Services from './pages/Services';
 import ServiceDetails from './pages/ServiceDetails';
+import AddService from './pages/AddService';
 function App() {
 
   return (
     <Router>
-      <ScrollToTop/>
+      <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
 
@@ -42,8 +42,8 @@ function App() {
               <Route path="/admin-dashboard" element={<Dashboard />} />
             </Route>
             {/* seller pages  */}
-            <Route element={<AuthRoute role='seller' />}>
-              <Route path="/add-product" element={<AddProduct />} />
+            <Route element={<AuthRoute role='provider' />}>
+              <Route path="/add-service" element={<AddService />} />
             </Route>
             {/* customer pages  */}
             <Route element={<AuthRoute role='customer' />}>

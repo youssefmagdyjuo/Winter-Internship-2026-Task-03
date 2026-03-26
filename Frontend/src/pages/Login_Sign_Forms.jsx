@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Input from '../components/Input'
 import Button from '../components/Button'
 import SwitchTogil from '../components/SwitchTogil';
 import FormLayout from '../components/FormLayout';
 import axios from 'axios';
-import { Navigate } from 'react-router-dom';
 export default function Login_Sign_Forms() {
 
     const [formType, setFormType] = useState('login');
@@ -28,9 +27,9 @@ export default function Login_Sign_Forms() {
                 email: '',
                 password: ''
             });
-            localStorage.setItem("mvec_token", response.data.token);
-            localStorage.setItem("mvec-user", JSON.stringify(response.data.data.name));
-            localStorage.setItem("mvec-email", JSON.stringify(response.data.data.email));
+            localStorage.setItem("ssbms_token", response.data.token);
+            localStorage.setItem("ssbms-user", JSON.stringify(response.data.data.name));
+            localStorage.setItem("ssbms-email", JSON.stringify(response.data.data.email));
             location.replace("/");
         } catch (error) {
             console.log(error);

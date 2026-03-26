@@ -6,7 +6,7 @@ import { toggleNavBar } from '../features/puplic/navBar.js';
 import LogoutButton from './LogoutButton.jsx';
 import { getUserRole } from '../hooks/user.js';
 export default function SideNavBar() {
-    const token = localStorage.getItem('mvec_token')
+    const token = localStorage.getItem('ssbms_token')
     // role base 
     const [userRole, setUserRole] = useState('')
     useEffect(() => {
@@ -18,7 +18,7 @@ export default function SideNavBar() {
             fetchRole()
         }
     }, [])
-    const storedUser = localStorage.getItem("mvec-user");
+    const storedUser = localStorage.getItem("ssbms-user");
     const user = storedUser ? JSON.parse(storedUser) : null;
     const dispatch = useDispatch();
     const isOpen = useSelector((state) => state.navBar.isOpen);
@@ -43,10 +43,10 @@ export default function SideNavBar() {
 
             ]
         );
-    } else if (userRole === 'seller') {
+    } else if (userRole === 'provider') {
         links.push(
             ...[
-                { name: 'Add Product', path: '/add-product', icon: 'fa-plus' },
+                { name: 'Add Service', path: '/add-service', icon: 'fa-plus' },
             ]
         );
     } else if (userRole === 'customer') {

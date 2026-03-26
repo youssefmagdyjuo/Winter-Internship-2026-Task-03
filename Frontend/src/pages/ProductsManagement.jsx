@@ -2,20 +2,18 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Input from '../components/Input'
 import { useSelector } from 'react-redux'
-// import { fetchAllProducts } from '../hooks/fetching'
+import { fetchAllServices } from '../hooks/fetching'
 import { Link } from 'react-router-dom'
 import Loader from '../components/Loader'
 import { getUserRole } from '../hooks/user'
 
-export default function ProductsManagement({ statusType }) {
+export default function ServicesManagement({ statusType }) {
     const [loading, setLoading] = useState(true)
     const isOpen = useSelector((state) => state.navBar.isOpen)
-    const [allProducts, setAllProducts] = useState([])
+    const [allServices, setAllServices] = useState([])
     const [searchData, setSearchData] = useState({
-        productName: '',
-        categoryName: '',
-        vendorName: '',
-        status: statusType
+        serviceName: '',
+        providerName: '',
     })
     // role base 
     const [userRole, setUserRole] = useState('')
@@ -27,42 +25,33 @@ export default function ProductsManagement({ statusType }) {
         fetchRole()
     }, [])
     // Fetch Products
-    // useEffect(() => {
-    //     const renderFun = async () => {
-    //         const data = await fetchAllProducts()
-    //         if (data) {
-    //             setAllProducts(data)
-    //         }
-    //         setLoading(false)
-    //     }
-    //     renderFun()
-    // }, [])
+    useEffect(() => {
+        const renderFun = async () => {
+            const data = await fetchAllServices()
+            if (data) {
+                setAllServices(data)
+            }
+            setLoading(false)
+        }
+        renderFun()
+    }, [])
 
     // Filter Logic
-    const filteredProducts = useMemo(() => {
-        return allProducts.filter(product => {
+    const filteredServices = useMemo(() => {
+        return allServices.filter(service => {
 
-            const productNameMatch =
-                product.title.toLowerCase()
-                    .includes(searchData.productName.toLowerCase())
+            const serviceNameMatch =
+                service.title.toLowerCase()
+                    .includes(searchData.serviceName.toLowerCase())
 
-            const categoryMatch =
-                searchData.categoryName === '' ||
-                product.categoryName?.toLowerCase()
-                    .includes(searchData.categoryName.toLowerCase())
+            const providerMatch =
+                searchData.providerName === '' ||
+                service.providerName?.toLowerCase()
+                    .includes(searchData.providerName.toLowerCase())
 
-            const vendorMatch =
-                searchData.vendorName === '' ||
-                product.sellerName?.toLowerCase()
-                    .includes(searchData.vendorName.toLowerCase())
-            const statusMatch =
-                searchData.status === '' ||
-                product.isApproved?.toLowerCase()
-                    .includes(searchData.status.toLowerCase())
-
-            return productNameMatch && categoryMatch && vendorMatch && statusMatch
+            return serviceNameMatch && providerMatch 
         })
-    }, [allProducts, searchData])
+    }, [allServices, searchData])
 
     return (
         <div>
@@ -71,53 +60,32 @@ export default function ProductsManagement({ statusType }) {
             <div className={`search_section_container center ${isOpen ? '' : 'full_layout'}`}>
                 <div className="search_section">
                     <span className='text-lg w-full center font-bold'>
-                        Search Products
+                        Search Services
                     </span>
 
                     <Input
-                        placeholder="Product Name"
-                        value={searchData.productName}
+                        placeholder="Service Name"
+                        value={searchData.serviceName}
                         onChange={(e) =>
                             setSearchData(prev => ({
                                 ...prev,
-                                productName: e.target.value
+                                serviceName: e.target.value
                             }))
                         }
                     />
 
-                    <Input
-                        placeholder="Category Name"
-                        value={searchData.categoryName}
-                        onChange={(e) =>
-                            setSearchData(prev => ({
-                                ...prev,
-                                categoryName: e.target.value
-                            }))
-                        }
-                    />
                     {
                         userRole == 'admin' ? <Input
-                            placeholder="Vendor Name"
-                            value={searchData.vendorName}
+                            placeholder="provider Name"
+                            value={searchData.providerName}
                             onChange={(e) =>
                                 setSearchData(prev => ({
                                     ...prev,
-                                    vendorName: e.target.value
+                                    providerName: e.target.value
                                 }))
                             }
                         /> : ''
                     }
-
-                    <Input
-                        placeholder="Status"
-                        value={searchData.status}
-                        onChange={(e) =>
-                            setSearchData(prev => ({
-                                ...prev,
-                                status: e.target.value
-                            }))
-                        }
-                    />
                 </div>
             </div>
 
@@ -126,63 +94,40 @@ export default function ProductsManagement({ statusType }) {
                 {
                     loading ? (
                         <Loader />
-                    ) : filteredProducts.length > 0 ? (
+                    ) : filteredServices.length > 0 ? (
                         <table className="w-full border-collapse text-center productsTable">
 
                             <thead>
                                 <tr>
-                                    <th>Product</th>
-                                    <th>Status</th>
-                                    <th>Category</th>
-                                    {userRole == 'admin' ? <th>Vendor</th> : ''}
+                                    <th>Service</th>
+                                    {userRole == 'admin' ? <th>Provider</th> : ''}
                                     <th>Price</th>
-                                    <th>Stock</th>
                                     <th>Details</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {filteredProducts.map((product) => (
-                                    <tr key={product._id} className="hover:bg-gray-50">
-
+                                {filteredServices.map((service) => (
+                                    <tr key={service._id} className="hover:bg-gray-50">
                                         <td>
-                                            {product.title}
+                                            {service.title}
                                         </td>
 
-                                        <td className="p-3 border">
-                                            <span className={` rounded text-white 
-                                            ${product.isApproved === "approved"
-                                                    ? "bg-[var(--green)]"
-                                                    : product.isApproved === "rejected"
-                                                        ? "bg-[var(--color-danger)]"
-                                                        : product.isApproved === "pending"
-                                                            ? "bg-[var(--yellow)]"
-                                                            : ""
-                                                }`}>
-                                                {product.isApproved}
-                                            </span>
-                                        </td>
-
-                                        <td >
-                                            {product.categoryName}
-                                        </td>
                                         {
                                             userRole == 'admin' ?
                                                 <td >
-                                                    {product.sellerName}
+                                                    {service.sellerName}
                                                 </td> : ''
                                         }
                                         <td className="font-bold">
-                                            {product.price}$
+                                            {service.price}$
                                         </td>
 
-                                        <td >
-                                            {product.stock}
-                                        </td>
+
 
                                         <td>
                                             <Link
-                                                to={`/products/${product._id}`}
+                                                to={`/services/${service._id}`}
                                                 className="text-[var(--color-primary)] underline"
                                             >
                                                 View
@@ -196,7 +141,7 @@ export default function ProductsManagement({ statusType }) {
                         </table>
                     ) : (
                         <p className="no-results center">
-                            No products found
+                            No services found
                         </p>
                     )
                 }

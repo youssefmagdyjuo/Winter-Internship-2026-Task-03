@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
 import CreateNewUser from '../components/CreateNewUser'
 import { getUserRole } from '../hooks/user'
-import ProductsManagement from './ProductsManagement'
+import ServicesManagement from './ProductsManagement'
 export default function Profile() {
     // role base 
     const [userRole, setUserRole] = useState('')
@@ -19,9 +19,9 @@ export default function Profile() {
         }
         fetchRole()
     }, [])
-    const userName = JSON.parse(localStorage.getItem('mvec-user'))
-    const userEmail = JSON.parse(localStorage.getItem('mvec-email'))
-    const token = localStorage.getItem('mvec_token')
+    const userName = JSON.parse(localStorage.getItem('ssbms-user'))
+    const userEmail = JSON.parse(localStorage.getItem('ssbms-email'))
+    const token = localStorage.getItem('ssbms_token')
     const [isOpen, setIsOpen] = useState(false)
     const [openToast, setOpenToast] = useState(false)
     const [view, setView] = useState('')
@@ -33,8 +33,8 @@ export default function Profile() {
     const [currentPass, setCurrentPass] = useState('')
     const [newPass, setNewPassPass] = useState('')
     const handleLogout = () => {
-        localStorage.removeItem("mvec_token");
-        localStorage.removeItem("mvec-user");
+        localStorage.removeItem("ssbms_token");
+        localStorage.removeItem("ssbms-user");
         dispatch(clearCart())
         location.replace("/login-signup");
     }
@@ -99,9 +99,9 @@ export default function Profile() {
                                 <p onClick={() => { setView('create_new_user') }}>Create new user</p>
                                 <p onClick={() => { setView('site_mode') }}>Site Mode</p>
                             </>)
-                            : userRole && userRole == 'seller'
+                            : userRole && userRole == 'provider'
                                 ? (<>
-                                    <p onClick={() => { setView('seller_product') }}>My Products</p>
+                                    <p onClick={() => { setView('provider_services') }}>My Services</p>
                                 </>)
                                 : userRole && userRole == 'customer'
                                     ? (<>customer</>)
@@ -115,8 +115,8 @@ export default function Profile() {
                 {
                     view == 'create_new_user'
                         ? (<CreateNewUser token={token} />)
-                        : view == 'seller_product'
-                            ? (<ProductsManagement statusType={''} />)
+                        : view == 'provider_services'
+                            ? (<ServicesManagement statusType={''} />)
                             : (<></>)
                 }
             </div>
