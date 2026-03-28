@@ -8,7 +8,9 @@ import { useNavigate } from 'react-router-dom'
 import Toast from '../components/Toast'
 import { getUserRole } from '../hooks/user'
 import AddService from './AddService'
+import Input from '../components/Input'
 export default function ServiceDetails() {
+    const [date, setDate] = useState(null)
     const token = localStorage.getItem('ssbms_token')
     // role base 
     const [userRole, setUserRole] = useState('')
@@ -72,6 +74,36 @@ export default function ServiceDetails() {
         //close PopUpLayout
         setIsOpen(false)
     }
+    // request service function
+    const handleBooking = async () => {        
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/v1/api/bookings`,
+                { serviceId: id, date }
+                , {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+            setMessage({
+                text: response.data.message,
+                type: 'success'
+            })
+            setOpenToast(true);
+            setDate(null)
+            setTimeout(() => { navigate('/services') }, 3000);
+        } catch (error) {
+            console.log(error)
+            setMessage({
+                text: error.response.data.message,
+                type: 'error'
+            })
+            setOpenToast(true);
+        } finally {
+            setTimeout(() => { setOpenToast(false) }, 3000);
+        }
+        //close PopUpLayout
+        setIsOpen(false)
+    }
     return (
         <div className='flex flex-col items-center pb-20'>
             {
@@ -94,7 +126,7 @@ export default function ServiceDetails() {
                                 userRole && userRole == 'customer'
                                     ? (<>
                                         <div className='flex gap-2 w-40 m-auto' style={{ paddingBottom: '1rem' }}>
-                                            <Button style={'btn-secondary'} onClick={() => { }}>
+                                            <Button style={'btn-secondary'} onClick={() => setIsOpen(true)}>
                                                 <div className="flex gap-2 items-center justify-center">
                                                     <i className="fa-solid fa-bag-shopping"></i>
                                                     <span>Request</span>
@@ -133,7 +165,17 @@ export default function ServiceDetails() {
             <PopUpLayout open={isOpen}>
                 <div className="flex flex-col justify-between gap-4">
                     <p className="text-xl text-center">
-                        {userRole == 'provider' ? 'Are you sure you want to remove this service ?' : ''}
+                        {userRole == 'provider'
+                            ? 'Are you sure you want to remove this service ?'
+                            : userRole == 'customer'
+                                ? (<>
+                                    <p>booking this service ?</p>
+                                    <Input
+                                        type='date'
+                                        value={date}
+                                        onChange={(e) => { setDate(e.target.value) }}
+                                    />
+                                </>) : ''}
                     </p>
                     <div className="flex gap-2 justify-center">
                         {
@@ -146,7 +188,16 @@ export default function ServiceDetails() {
                                 >
                                     Remove
                                 </Button>)
-                                : (<></>)
+                                : userRole && userRole == 'customer'
+                                    ? (<Button
+                                        style="btn-primary"
+                                        onClick={() => {
+                                            handleBooking()
+                                        }}
+                                    >
+                                        Booking
+                                    </Button>)
+                                    : (<></>)
                         }
                         <Button
                             onClick={() => setIsOpen(false)}

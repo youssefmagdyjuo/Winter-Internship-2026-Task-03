@@ -7,7 +7,6 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import ProtectedRoute from './components/ProtectedRoute';
 import Cart from './pages/Cart';
-import Orders from './pages/Orders';
 import OrderDetails from './pages/OrderDetails';
 import Dashboard from './pages/admin/Dashboard';
 import NotAuthorized from './pages/NotAuthorized';
@@ -18,6 +17,7 @@ import ScrollToTop from './components/ScrollToTop';
 import Services from './pages/Services';
 import ServiceDetails from './pages/ServiceDetails';
 import AddService from './pages/AddService';
+import Bookings from './pages/Bookings';
 function App() {
 
   return (
@@ -51,7 +51,7 @@ function App() {
             </Route>
             {/*  pages for all  */}
             <Route path="/profile" element={<Profile />} />
-            <Route path="/orders" element={<Orders />} />
+            <Route path="/bookings" element={<Bookings/>} />
             <Route path="/orders/:id" element={<OrderDetails />} />
           </Route>
 

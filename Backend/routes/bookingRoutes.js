@@ -21,10 +21,8 @@ router.route('/')
         allowedTo('customer','admin'),
         createBooking
     )
-    // Admin + Provider can view all bookings
     .get(
         protect,
-        allowedTo('admin', 'provider'),
         getAllBookings
     );
 

@@ -32,7 +32,7 @@ export default function SideNavBar() {
     if (userRole) {
         links.push(
             ...[
-                { name: 'Orders', path: '/orders', icon: 'fa-hand' },
+                { name: 'Bookings', path: '/bookings', icon: 'fa-hand' },
             ]
         );
     }

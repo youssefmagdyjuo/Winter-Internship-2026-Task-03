@@ -9,10 +9,10 @@ const createBooking = async (req, res) => {
     try {
         const { serviceId, date } = req.body;
 
-        if (!serviceId || !date) {
+        if (!date) {
             return res.status(400).json({
                 status: 'fail',
-                message: 'serviceId and date are required'
+                message: 'date are required'
             });
         }
 
@@ -62,22 +62,36 @@ const getAllBookings = async (req, res) => {
         let bookings = [];
 
         if (userRole === 'customer') {
-            bookings = await Booking.find({ customerId: userId });
+            bookings = await Booking.find({ customerId: userId })
+                .populate('serviceId', 'title')
+                .populate('providerId', 'name');
         }
 
         else if (userRole === 'admin') {
-            bookings = await Booking.find({});
+            bookings = await Booking.find({})
+                .populate('serviceId', 'title')
+                .populate('providerId', 'name');
         }
 
         else if (userRole === 'provider') {
-            bookings = await Booking.find({ providerId: userId });
+            bookings = await Booking.find({ providerId: userId })
+                .populate('serviceId', 'title')
+                .populate('providerId', 'name');
         }
 
+        // reshape data
+        const formattedBookings = bookings.map((booking) => ({
+            ...booking._doc,
+
+            serviceName: booking.serviceId?.title || null,
+            providerName: booking.providerId?.name || null,
+        }));
+
         res.status(200).json({
-            results: bookings.length,
+            results: formattedBookings.length,
             status: 'success',
             message: "Bookings fetched successfully",
-            data: bookings
+            data: formattedBookings
         });
 
     } catch (err) {
@@ -87,7 +101,6 @@ const getAllBookings = async (req, res) => {
         });
     }
 };
-
 
 // =========================
 // UPDATE BOOKING STATUS

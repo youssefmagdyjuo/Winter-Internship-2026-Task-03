@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getUserRole } from '../../hooks/user'
-import Orders from '../Orders'
+import Orders from '../Bookings'
 import Statistics from './Statistics'
 import ProductsManagement from '../ProductsManagement'
 import CategoriesManagement from '../../components/CategoriesManagement'
@@ -52,8 +52,8 @@ export default function Dashboard() {
                             : view == 'statistics'
                                 ? (<Statistics />)
                                 : view == 'categories'
-                                ?(<CategoriesManagement/>)
-                                :(<></>)
+                                    ? (<CategoriesManagement />)
+                                    : (<></>)
                 }
             </div>
         </div>

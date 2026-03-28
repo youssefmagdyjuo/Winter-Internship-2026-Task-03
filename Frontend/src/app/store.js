@@ -13,7 +13,7 @@ import storage from "redux-persist/lib/storage";
 import navBarReducer from "../features/puplic/navBar.js";
 import servicesReducer from "../features/services folder/services.js";
 import cartReducer from "../features/cart/cart.js";
-import allOrdersReducer from "../features/orders/allOrders.js";
+import allBookingsReducer from "../features/bookings/allBookings.js";
 
 const cartPersistConfig = {
     key: "cart",
@@ -27,7 +27,7 @@ export const store = configureStore({
         navBar: navBarReducer,
         services: servicesReducer,
         cart: persistedCartReducer,
-        allOrders: allOrdersReducer,
+        allBookings: allBookingsReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
