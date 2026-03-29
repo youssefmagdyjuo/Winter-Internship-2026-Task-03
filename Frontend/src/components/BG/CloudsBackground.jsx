@@ -12,8 +12,8 @@ export default function VantaBackGround() {
                 el: vantaRef.current,
                 THREE: THREE,
 
-                skyColor: 0x020617,
-                cloudColor: 0x0284c7,
+                skyColor: 0x68b8d7,
+                cloudColor: 0xadc1de,
                 speed: 0.5,
             });
         }
@@ -27,4 +27,5 @@ export default function VantaBackGround() {
     }, []);
 
     return <div ref={vantaRef} className="background" />;
+
 }
