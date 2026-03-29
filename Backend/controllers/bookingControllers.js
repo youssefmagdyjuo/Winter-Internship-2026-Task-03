@@ -151,22 +151,15 @@ const updateBookingStatus = async (req, res) => {
         else if (userRole === 'provider' || userRole === 'admin') {
 
             if (status) {
-                if (foundBooking.status !== 'pending') {
+                if (foundBooking.status == status) {
                     return res.status(400).json({
                         status: 'fail',
                         message: `Status already ${foundBooking.status}`
                     });
                 }
+                foundBooking.status = status;
+                await foundBooking.save();
 
-                if (status === 'approved' || status === 'rejected') {
-                    foundBooking.status = status;
-                    await foundBooking.save();
-                } else {
-                    return res.status(400).json({
-                        status: 'fail',
-                        message: 'Invalid status'
-                    });
-                }
             }
         }
 

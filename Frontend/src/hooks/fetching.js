@@ -27,3 +27,23 @@ export const fetchAllServices = async () => {
         return [];
     }
 };
+export const fetchServicesByProviderId = async () => {
+    try {
+        const token = localStorage.getItem('ssbms_token');
+        const response = await axios.get(
+            `${import.meta.env.VITE_API_URL}/v1/api/services/provider`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        const services = response.data.data;
+
+        return services;
+
+    } catch (error) {
+        console.log(error);
+        return [];
+    }
+};

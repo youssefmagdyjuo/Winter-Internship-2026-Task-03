@@ -8,7 +8,8 @@ import { useDispatch } from 'react-redux'
 import Toast from '../components/Toast'
 import CreateNewUser from '../components/CreateNewUser'
 import { getUserRole } from '../hooks/user'
-import ServicesManagement from './ProductsManagement'
+import ServicesManagement from './ServicesManagement'
+import Bookings from './Bookings'
 export default function Profile() {
     // role base 
     const [userRole, setUserRole] = useState('')
@@ -104,7 +105,9 @@ export default function Profile() {
                                     <p onClick={() => { setView('provider_services') }}>My Services</p>
                                 </>)
                                 : userRole && userRole == 'customer'
-                                    ? (<>customer</>)
+                                    ? (<>
+                                    <p onClick={() => { setView('customer_bookings') }}>My Bookings</p>
+                                    </>)
                                     : (<></>)
                     }
 
@@ -116,8 +119,10 @@ export default function Profile() {
                     view == 'create_new_user'
                         ? (<CreateNewUser token={token} />)
                         : view == 'provider_services'
-                            ? (<ServicesManagement statusType={''} />)
-                            : (<></>)
+                            ? (<ServicesManagement statusType={''} providerUi={true} />)
+                            : view == 'customer_bookings'
+                            ? (<Bookings />)
+                            :(<></>)
                 }
             </div>
             <PopUpLayout open={isOpen}>

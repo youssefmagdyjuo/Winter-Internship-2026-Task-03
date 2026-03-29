@@ -6,8 +6,7 @@ import Layout from './pages/Layout';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import ProtectedRoute from './components/ProtectedRoute';
-import Cart from './pages/Cart';
-import OrderDetails from './pages/OrderDetails';
+import BookingDetails from './pages/BookingDetails';
 import Dashboard from './pages/admin/Dashboard';
 import NotAuthorized from './pages/NotAuthorized';
 import AuthRoute from './components/AuthRoute';
@@ -45,14 +44,10 @@ function App() {
             <Route element={<AuthRoute role='provider' />}>
               <Route path="/add-service" element={<AddService />} />
             </Route>
-            {/* customer pages  */}
-            <Route element={<AuthRoute role='customer' />}>
-              <Route path="/cart" element={<Cart />} />
-            </Route>
             {/*  pages for all  */}
             <Route path="/profile" element={<Profile />} />
             <Route path="/bookings" element={<Bookings/>} />
-            <Route path="/orders/:id" element={<OrderDetails />} />
+            <Route path="/bookings/:id" element={<BookingDetails />} />
           </Route>
 
         </Route>

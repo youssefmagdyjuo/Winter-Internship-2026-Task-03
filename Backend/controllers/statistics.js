@@ -1,52 +1,80 @@
-const Order = require('../models/bookingModel');
-const Product = require('../models/serviceModel');
+const Booking = require('../models/bookingModel');
+const Service = require('../models/serviceModel');
 const User = require('../models/userModel');
 
 const getStatistics = async (req, res) => {
     try {
-        // all Statistics
-        const totalProducts = await Product.countDocuments();
-        const totalUsers = await User.countDocuments();
-        const totalOrders = await Order.countDocuments();
-        // Total Revenue (only completed orders)
-        const totalRevenueAgg = await Order.aggregate([
-            { $match: { status: 'completed' } }, // بس orders اللي مكتملة
-            { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
-        ]);
-        const totalRevenue = totalRevenueAgg[0]?.totalRevenue || 0;
 
-        // Daily Sales Data (only completed orders)
-        const dailyData = await Order.aggregate([
-            { $match: { status: 'completed' } }, // شرط الـ completed هنا كمان
+        // =========================
+        // TOTALS
+        // =========================
+        const totalServices = await Service.countDocuments();
+        const totalUsers = await User.countDocuments();
+        const totalBookings = await Booking.countDocuments();
+
+        // Approved bookings only
+        const totalApprovedBookings = await Booking.countDocuments({
+            status: 'approved'
+        });
+
+        const totalPendingBookings = await Booking.countDocuments({
+            status: 'pending'
+        });
+
+        const totalRejectedBookings = await Booking.countDocuments({
+            status: 'rejected'
+        });
+
+        // =========================
+        // DAILY BOOKINGS
+        // =========================
+        const dailyData = await Booking.aggregate([
             {
                 $group: {
-                    _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-                    totalRevenue: { $sum: "$totalAmount" },
-                    totalOrders: { $sum: 1 }
+                    _id: {
+                        $dateToString: {
+                            format: "%Y-%m-%d",
+                            date: "$createdAt"
+                        }
+                    },
+                    totalBookings: { $sum: 1 },
+                    approvedBookings: {
+                        $sum: {
+                            $cond: [{ $eq: ["$status", "approved"] }, 1, 0]
+                        }
+                    }
                 }
             },
             { $sort: { "_id": 1 } }
         ]);
 
-        const dailySales = dailyData.map(d => ({
+        const dailyStats = dailyData.map(d => ({
             date: d._id,
-            revenue: d.totalRevenue,
-            orders: d.totalOrders
+            bookings: d.totalBookings,
+            approved: d.approvedBookings
         }));
 
+        // =========================
+        // RESPONSE
+        // =========================
         res.json({
             totals: {
-                totalProducts,
+                totalServices,
                 totalUsers,
-                totalOrders,
-                totalRevenue
+                totalBookings,
+                totalApprovedBookings,
+                totalPendingBookings,
+                totalRejectedBookings
             },
-            dailySales
+            dailyStats
         });
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({
+            status: 'fail',
+            message: err.message
+        });
     }
 };
 
-module.exports = { getStatistics }
+module.exports = { getStatistics };

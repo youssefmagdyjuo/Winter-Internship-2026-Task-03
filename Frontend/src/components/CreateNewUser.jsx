@@ -54,12 +54,12 @@ export default function CreateNewUser({token}) {
                     <label className="flex items-center gap-2 cursor-pointer">
                         <Input
                             onChange={(e) => setSignupData({ ...signupData, role: e.target.value })}
-                            value={"seller"}
+                            value={"provider"}
                             type="radio"
                             name="role"
-                            checked={signupData.role === 'seller'}
+                            checked={signupData.role === 'provider'}
                         />
-                        Seller
+                        Provider
                     </label>
 
                     <label className="flex items-center gap-2 cursor-pointer">

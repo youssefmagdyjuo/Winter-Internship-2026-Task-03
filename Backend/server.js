@@ -14,6 +14,7 @@ const userRoutes = require('./routes/usersRoutes');
 const authUserRoutes = require('./routes/authRoutes');
 const servicesRoutes = require('./routes/servicesRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
+const statisticsRoutes = require('./routes/statisticsRoutes');
 
 // ======================
 // Middleware
@@ -49,6 +50,9 @@ app.use('/v1/api/services', servicesRoutes);
 
 // ✅ Bookings (instead of orders)
 app.use('/v1/api/bookings', bookingRoutes);
+
+// Statistics
+app.use('/v1/api/statistics', statisticsRoutes);
 
 
 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { getUserRole } from '../../hooks/user'
-import Orders from '../Bookings'
 import Statistics from './Statistics'
-import ProductsManagement from '../ProductsManagement'
 import CategoriesManagement from '../../components/CategoriesManagement'
+import ServicesManagement from '../ServicesManagement'
+import Bookings from '../Bookings'
 
 export default function Dashboard() {
     const [userRole, setUserRole] = useState('')
@@ -25,30 +25,24 @@ export default function Dashboard() {
                     <strong>Statistics</strong>
                 </div>
                 <div
-                    onClick={() => { setView('orders') }}
+                    onClick={() => { setView('bookings') }}
                     className={`dashboardBox sm:w-full lg:w-100 center gap-4 ${view == 'orders' ? 'dashboardBoxActive' : ''}`}>
                     <i class=" fa-regular fa-clock"></i>
-                    <strong>Orders</strong>
+                    <strong>Bookings</strong>
                 </div>
                 <div
-                    onClick={() => { setView('products') }}
+                    onClick={() => { setView('services') }}
                     className={`dashboardBox sm:w-full lg:w-100 center gap-4 ${view == 'products' ? 'dashboardBoxActive' : ''}`}>
                     <i class="fa-solid fa-clipboard-list"></i>
-                    <strong>Products</strong>
-                </div>
-                <div
-                    onClick={() => { setView('categories') }}
-                    className={`dashboardBox sm:w-full lg:w-100 center gap-4 ${view == 'categories' ? 'dashboardBoxActive' : ''}`}>
-                    <i class="fa-solid fa-layer-group"></i>
-                    <strong>Categories</strong>
+                    <strong>Services</strong>
                 </div>
             </div>
             <div>
                 {
-                    view == 'orders'
-                        ? (<><Orders /></>)
-                        : view == 'products'
-                            ? (<ProductsManagement statusType={'pending'} />)
+                    view == 'bookings'
+                        ? (<><Bookings /></>)
+                        : view == 'services'
+                            ? (<ServicesManagement statusType={'pending'} />)
                             : view == 'statistics'
                                 ? (<Statistics />)
                                 : view == 'categories'

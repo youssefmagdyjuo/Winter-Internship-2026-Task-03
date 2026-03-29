@@ -293,6 +293,8 @@ export default function Bookings() {
                                                     ? "bg-green-500"
                                                     : booking.status === "rejected"
                                                         ? "bg-red-500"
+                                                        : booking.status === "cancelled"
+                                                        ? "bg-gray-500"
                                                         : "bg-yellow-500"
                                                 }`}>
                                                 {booking.status}

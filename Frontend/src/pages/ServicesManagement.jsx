@@ -2,12 +2,12 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Input from '../components/Input'
 import { useSelector } from 'react-redux'
-import { fetchAllServices } from '../hooks/fetching'
+import { fetchAllServices, fetchServicesByProviderId } from '../hooks/fetching'
 import { Link } from 'react-router-dom'
 import Loader from '../components/Loader'
 import { getUserRole } from '../hooks/user'
 
-export default function ServicesManagement({ statusType }) {
+export default function ServicesManagement({ statusType, providerUi = false }) {
     const [loading, setLoading] = useState(true)
     const isOpen = useSelector((state) => state.navBar.isOpen)
     const [allServices, setAllServices] = useState([])
@@ -27,9 +27,15 @@ export default function ServicesManagement({ statusType }) {
     // Fetch Products
     useEffect(() => {
         const renderFun = async () => {
-            const data = await fetchAllServices()
-            if (data) {
+            let data;
+            if (providerUi) {
+                data = await fetchServicesByProviderId()
+            }
+            else {
+                data = await fetchAllServices()
+            } if (data) {
                 setAllServices(data)
+
             }
             setLoading(false)
         }
@@ -49,7 +55,7 @@ export default function ServicesManagement({ statusType }) {
                 service.providerName?.toLowerCase()
                     .includes(searchData.providerName.toLowerCase())
 
-            return serviceNameMatch && providerMatch 
+            return serviceNameMatch && providerMatch
         })
     }, [allServices, searchData])
 
@@ -116,7 +122,7 @@ export default function ServicesManagement({ statusType }) {
                                         {
                                             userRole == 'admin' ?
                                                 <td >
-                                                    {service.sellerName}
+                                                    {service.providerName}
                                                 </td> : ''
                                         }
                                         <td className="font-bold">

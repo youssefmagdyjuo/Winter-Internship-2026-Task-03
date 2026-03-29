@@ -49,13 +49,7 @@ export default function SideNavBar() {
                 { name: 'Add Service', path: '/add-service', icon: 'fa-plus' },
             ]
         );
-    } else if (userRole === 'customer') {
-        links.push(
-            ...[
-                { name: 'Cart', path: '/cart', icon: 'fa-cart-arrow-down' },
-            ]
-        );
-    }
+    } 
     if (userRole) {
         links.push(
             ...[

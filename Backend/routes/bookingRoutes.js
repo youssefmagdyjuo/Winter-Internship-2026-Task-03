@@ -39,7 +39,6 @@ router.route('/:id')
     // Update booking status (provider/admin)
     .put(
         protect,
-        allowedTo('provider', 'admin'),
         updateBookingStatus
     )
     .delete(
